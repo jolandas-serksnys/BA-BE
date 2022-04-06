@@ -5,7 +5,7 @@ import cors from 'cors';
 import { createServer } from "http";
 import { Server } from "socket.io";
 
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = [process.env.FE_URL];
 
 const options: cors.CorsOptions = {
   origin: allowedOrigins,

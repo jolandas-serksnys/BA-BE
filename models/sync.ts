@@ -11,6 +11,7 @@ import { Tag } from "./menu/tag";
 
 export const Sync = async () => {
   try {
+    /*
     await Establishment.sync({ force: true }).then(() => console.log("Establishments table created"));
     await Employee.sync({ force: true }).then(() => console.log("Employees table created"));
 
@@ -28,6 +29,7 @@ export const Sync = async () => {
     await TableOrder.sync({ force: true }).then(() => console.log("Table Orders table created"));
     await CustomerOrder.sync({ force: true }).then(() => console.log("Customer Orders table created"));
     await OrderAddon.sync({ force: true }).then(() => console.log("Orders addons table created"));
+    */
   } catch (error) {
     console.error(error);
   }
