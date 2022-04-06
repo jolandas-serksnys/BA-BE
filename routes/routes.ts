@@ -6,7 +6,6 @@ import {
   DishController
 } from "../controllers";
 import { AuthController } from "../controllers/authentication/authentication.controller";
-import { environment as env } from "../environment";
 import { checkDuplicate, verifyToken } from "../middleware";
 import { OrderController } from "../controllers/order";
 
@@ -20,74 +19,74 @@ export class Routes {
   public orderController: OrderController = new OrderController();
 
   public routes(app): void {
-    app.route(`${env.baseUrl}/`).get(this.tablesController.index);
+    app.route(`${process.env.BASE_URL}/`).get(this.tablesController.index);
 
-    app.route(`${env.baseUrl}/user`).get(this.authController.user);
-    app.route(`${env.baseUrl}/sign-in`).post(this.authController.customerSignIn);
-    app.route(`${env.baseUrl}/e/sign-in`).post(this.authController.employeeSignIn);
-    app.route(`${env.baseUrl}/e/sign-up`).post(checkDuplicate, this.authController.employeeSignUp);
-    app.route(`${env.baseUrl}/e/update-account`).post(this.authController.employeeUpdateAccount);
+    app.route(`${process.env.BASE_URL}/user`).get(this.authController.user);
+    app.route(`${process.env.BASE_URL}/sign-in`).post(this.authController.customerSignIn);
+    app.route(`${process.env.BASE_URL}/e/sign-in`).post(this.authController.employeeSignIn);
+    app.route(`${process.env.BASE_URL}/e/sign-up`).post(checkDuplicate, this.authController.employeeSignUp);
+    app.route(`${process.env.BASE_URL}/e/update-account`).post(this.authController.employeeUpdateAccount);
 
-    app.route(`${env.baseUrl}/table`)
+    app.route(`${process.env.BASE_URL}/table`)
       .get(this.tablesController.index)
       .post(verifyToken, this.tablesController.create);
-    app.route(`${env.baseUrl}/table/check/:id`).get(this.tablesController.checkAvailability);
-    app.route(`${env.baseUrl}/table/:id/check`).get(this.tablesController.checkAvailability);
-    app.route(`${env.baseUrl}/table/claimed`).get(this.tablesController.getClaimed);
-    app.route(`${env.baseUrl}/table/:id`)
+    app.route(`${process.env.BASE_URL}/table/check/:id`).get(this.tablesController.checkAvailability);
+    app.route(`${process.env.BASE_URL}/table/:id/check`).get(this.tablesController.checkAvailability);
+    app.route(`${process.env.BASE_URL}/table/claimed`).get(this.tablesController.getClaimed);
+    app.route(`${process.env.BASE_URL}/table/:id`)
       .get(this.tablesController.get)
       .put(verifyToken, this.tablesController.update)
       .delete(verifyToken, this.tablesController.delete);
-    app.route(`${env.baseUrl}/table/:id/toggle-availability`)
+    app.route(`${process.env.BASE_URL}/table/:id/toggle-availability`)
       .post(verifyToken, this.tablesController.toggleAvailability);
 
-    app.route(`${env.baseUrl}/employee`)
+    app.route(`${process.env.BASE_URL}/employee`)
       .get(verifyToken, this.employeeController.index)
       .post(verifyToken, this.employeeController.create);
-    app.route(`${env.baseUrl}/employee/:id`)
+    app.route(`${process.env.BASE_URL}/employee/:id`)
       .get(verifyToken, this.employeeController.get)
       .put(verifyToken, this.employeeController.update)
       .delete(verifyToken, this.employeeController.delete);
 
-    app.route(`${env.baseUrl}/establishment`)
+    app.route(`${process.env.BASE_URL}/establishment`)
       .get(this.establishmentController.index)
       .post(verifyToken, this.establishmentController.create);
-    app.route(`${env.baseUrl}/establishment/:id`)
+    app.route(`${process.env.BASE_URL}/establishment/:id`)
       .get(this.establishmentController.get)
       .put(verifyToken, this.establishmentController.update)
       .delete(verifyToken, this.establishmentController.delete);
 
-    app.route(`${env.baseUrl}/category`)
+    app.route(`${process.env.BASE_URL}/category`)
       .get(this.categoryController.index)
       .post(verifyToken, this.categoryController.create);
-    app.route(`${env.baseUrl}/category/:id`)
+    app.route(`${process.env.BASE_URL}/category/:id`)
       .get(this.categoryController.get)
       .put(verifyToken, this.categoryController.update)
       .delete(verifyToken, this.categoryController.delete);
 
-    app.route(`${env.baseUrl}/category/:categoryId/dish`)
+    app.route(`${process.env.BASE_URL}/category/:categoryId/dish`)
       .get(this.dishController.index)
       .post(verifyToken, this.dishController.create);
-    app.route(`${env.baseUrl}/category/:categoryId/dish/:id`)
+    app.route(`${process.env.BASE_URL}/category/:categoryId/dish/:id`)
       .get(this.dishController.get)
       .put(verifyToken, this.dishController.update)
       .delete(verifyToken, this.dishController.delete);
-    app.route(`${env.baseUrl}/category/:categoryId/dish/:id/toggle-availability`)
+    app.route(`${process.env.BASE_URL}/category/:categoryId/dish/:id/toggle-availability`)
       .post(verifyToken, this.dishController.toggleAvailability);
-    app.route(`${env.baseUrl}/category/:categoryId/dish/:id/toggle-visibility`)
+    app.route(`${process.env.BASE_URL}/category/:categoryId/dish/:id/toggle-visibility`)
       .post(verifyToken, this.dishController.toggleVisibility);
 
-    app.route(`${env.baseUrl}/order`)
+    app.route(`${process.env.BASE_URL}/order`)
       .post(this.orderController.processOrder);
-    app.route(`${env.baseUrl}/order/price`)
+    app.route(`${process.env.BASE_URL}/order/price`)
       .post(this.orderController.calculatePrice);
-    app.route(`${env.baseUrl}/order/table`)
+    app.route(`${process.env.BASE_URL}/order/table`)
       .post(this.orderController.getTableOrder);
-    app.route(`${env.baseUrl}/order/:id/cancel`)
+    app.route(`${process.env.BASE_URL}/order/:id/cancel`)
       .post(this.orderController.cancel);
-    app.route(`${env.baseUrl}/order/active`)
+    app.route(`${process.env.BASE_URL}/order/active`)
       .get(this.orderController.getActiveOrders);
-    app.route(`${env.baseUrl}/order/:id/status`)
+    app.route(`${process.env.BASE_URL}/order/:id/status`)
       .post(this.orderController.updateStatus);
   }
 }
