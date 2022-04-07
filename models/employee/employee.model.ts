@@ -4,12 +4,12 @@ import { BaseModel } from "../base.model";
 import { Establishment } from "../establishment";
 
 export enum EmployeeRole {
-  GENERAL,
-  WAITER,
-  ADMINISTRATOR,
-  RECEPTIONIS,
-  KITCHEN,
-  OTHER
+  GENERAL = 'GENERAL',
+  WAITER = 'WAITER',
+  ADMINISTRATOR = 'ADMINISTRATOR',
+  RECEPTIONIS = 'RECEPTIONIS',
+  KITCHEN = 'KITCHEN',
+  OTHER = 'OTHER'
 }
 
 export interface EmployeeInterface {

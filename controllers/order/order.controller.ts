@@ -170,8 +170,15 @@ export class OrderController {
           status: CustomerOrderStatus.CANCELLED
         });
 
+        const tableOrder = await TableOrder.findByPk(customerOrder.tableOrderId);
+        const claimClients = await new TableController().getSocketsByClaimId(tableOrder.tableClaimId);
+
         res.status(200).json({
           isSuccessful: true, type: ResponseType.SUCCESS, message: MESSAGE_200
+        });
+
+        claimClients.forEach((client) => {
+          app.io.to(client.id).emit('status', true);
         });
       } else {
         res.status(404).json({

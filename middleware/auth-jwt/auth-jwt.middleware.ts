@@ -27,14 +27,28 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   Employee.findByPk(req.body.userId)
-  .then((employee) => {
-    if (!employee || employee.role !== EmployeeRole.ADMINISTRATOR) {
-      res.status(403).send({
-        message: 'Need admin rights'
-      });
-      return;
-    }
+    .then((employee) => {
+      if (!employee || employee.role !== EmployeeRole.ADMINISTRATOR) {
+        res.status(403).send({
+          message: 'Need admin rights'
+        });
+        return;
+      }
 
-    next();
-  });
+      next();
+    });
+};
+
+export const isEmployee = (req: Request, res: Response, next: NextFunction) => {
+  Employee.findByPk(req.body.userId)
+    .then((employee) => {
+      if (!employee) {
+        res.status(403).send({
+          message: 'Need admin rights'
+        });
+        return;
+      }
+
+      next();
+    });
 };
