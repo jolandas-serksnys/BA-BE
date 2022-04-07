@@ -1,5 +1,7 @@
 import { Sequelize } from "sequelize";
 
+
+/*
 export const database = new Sequelize({
   host: 'wb39lt71kvkgdmw0.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
   username: 'phxxq5q9vej4qzrf',
@@ -14,8 +16,7 @@ export const database = new Sequelize({
   },
   logging: false
 });
-
-/*
+*/
 export const database = new Sequelize({
   host: 'localhost',
   username: 'root',
@@ -30,4 +31,3 @@ export const database = new Sequelize({
   },
   logging: false
 });
-*/
