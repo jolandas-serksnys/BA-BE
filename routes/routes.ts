@@ -24,17 +24,19 @@ export class Routes {
 
     app.route(`${process.env.BASE_URL}/user`)
       .get(this.authController.user);
-    app.route(`${process.env.BASE_URL}/sign-in`)
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/sign-in`)
       .post(this.authController.customerSignIn);
     app.route(`${process.env.BASE_URL}/claimed`)
       .get([verifyToken], this.tablesController.getClaimed);
 
-    app.route(`${process.env.BASE_URL}/e/sign-in`)
+    app.route(`${process.env.BASE_URL}/employee/sign-in`)
       .post(this.authController.employeeSignIn);
-    app.route(`${process.env.BASE_URL}/e/sign-up`)
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/employee/sign-up`)
       .post(checkDuplicate, this.authController.employeeSignUp);
-    app.route(`${process.env.BASE_URL}/e/update-account`)
-      .post([verifyToken, isAdmin], this.authController.employeeUpdateAccount);
+    app.route(`${process.env.BASE_URL}/employee/update-account`)
+      .post([verifyToken, isEmployee], this.authController.employeeUpdateAccount);
+    app.route(`${process.env.BASE_URL}/employee/update-password`)
+      .post([verifyToken, isEmployee], this.authController.employeeUpdatePassword);
 
     app.route(`${process.env.BASE_URL}/employee`)
       .get([verifyToken, isAdmin], this.employeeController.index)

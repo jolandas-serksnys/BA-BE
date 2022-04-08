@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { DestroyOptions, UpdateOptions } from "sequelize";
-import { Employee, EmployeeInterface } from "../../models";
+import { Employee, EmployeeType } from "../../models";
 
 export class EmployeeController {
   public index(req: Request, res: Response) {
@@ -10,7 +10,7 @@ export class EmployeeController {
   }
 
   public create(req: Request, res: Response) {
-    const params: EmployeeInterface = req.body;
+    const params: EmployeeType = req.body;
 
     Employee.create<Employee>({ params })
       .then((Employee: Employee) => res.status(201).json(Employee))
@@ -33,7 +33,7 @@ export class EmployeeController {
 
   public update(req: Request, res: Response) {
     const id: number = parseInt(req.params.id);
-    const params: EmployeeInterface = req.body;
+    const params: EmployeeType = req.body;
 
     const update: UpdateOptions = {
       where: { id: id },

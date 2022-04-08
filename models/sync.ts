@@ -1,7 +1,7 @@
 import { Category } from "./menu/category";
 import { Customer } from "./customer";
 import { Dish } from "./menu/dish";
-import { Employee } from "./employee";
+import { Employee, SignUpCode } from "./employee";
 import { Establishment } from "./establishment";
 import { Table, TableClaim } from "./table";
 import { Addon } from "./menu/addon";
@@ -13,6 +13,7 @@ export const Sync = async () => {
   try {
     /*
     await Establishment.sync({ force: true }).then(() => console.log("Establishments table created"));
+    await SignUpCode.sync({ force: true }).then(() => console.log("Sign up codes table created"));
     await Employee.sync({ force: true }).then(() => console.log("Employees table created"));
 
     await Table.sync({ force: true }).then(() => console.log("Tables table created"));

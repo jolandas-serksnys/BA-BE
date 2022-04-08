@@ -5,7 +5,7 @@ import cors from 'cors';
 import { createServer } from "http";
 import { Server } from "socket.io";
 
-const allowedOrigins = [process.env.FE_URL];
+const allowedOrigins = [process.env.FRONT_END_CLIENT_URL];
 
 const options: cors.CorsOptions = {
   origin: allowedOrigins,

@@ -12,7 +12,7 @@ export enum EmployeeRole {
   OTHER = 'OTHER'
 }
 
-export interface EmployeeInterface {
+export type EmployeeType = {
   firstName: string;
   lastName: string;
   email: string;
@@ -62,4 +62,52 @@ Employee.init(
   }
 );
 
+export type SignUpCodeType = {
+  code: string;
+  establishmentId: number;
+  role: EmployeeRole;
+  isClaimed: boolean;
+}
+
+export class SignUpCode extends BaseModel {
+  declare code: string;
+  declare establishmentId: number;
+  declare role: EmployeeRole;
+  declare isClaimed: boolean;
+}
+
+SignUpCode.init(
+  {
+    code: {
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
+    establishmentId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM(
+        'GENERAL',
+        'WAITER',
+        'ADMINISTRATOR',
+        'RECEPTIONIS',
+        'KITCHEN',
+        'OTHER'
+      ),
+      allowNull: false,
+    },
+    isClaimed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+  },
+  {
+    tableName: 'signup_codes',
+    sequelize: database,
+  }
+);
+
 Employee.belongsTo(Establishment, { as: 'establishment', foreignKey: 'establishmentId' });
+SignUpCode.hasOne(Employee, { foreignKey: 'signUpCodeId' });
