@@ -5,7 +5,7 @@ import { CustomerOrder, CustomerOrderStatus, OrderAddon, OrderPriceRequestInterf
 import { ResponseType } from "../../utils";
 import app from "../../app";
 import { AuthController } from "../authentication";
-import { Customer, Table, TableClaim } from "../../models";
+import { Customer, Table, TableClaim, TableClaimStatus } from "../../models";
 import { TableController } from "../table";
 
 const MESSAGE_404 = 'Table order not found.';
@@ -332,17 +332,20 @@ export class OrderController {
     });
   };
 
-  public closeTableOrder = async (req: Request, res: Response) => {
+  public toggleTableOrderClaim = async (req: Request, res: Response) => {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
       const tableOrder = await TableOrder.findByPk(id);
 
       if (tableOrder) {
-        await tableOrder.update({
-          status: TableOrderStatus.CLOSED
+        const tableClaim = await TableClaim.findByPk(tableOrder.tableClaimId);
+
+        await tableClaim.update({
+          status: (tableClaim.status === TableClaimStatus.ACTIVE ?
+            TableClaimStatus.CLOSED : TableClaimStatus.ACTIVE)
         });
 
-        const claimClients = await new TableController().getRelevantSocketClients(tableOrder.tableClaimId);
+        const claimClients = await new TableController().getRelevantSocketClients(tableClaim.id);
 
         claimClients.forEach((client) => {
           app.io.to(client.id).emit('status', true);
@@ -351,7 +354,7 @@ export class OrderController {
         res.status(200).json({
           isSuccessful: true,
           type: ResponseType.SUCCESS,
-          message: MESSAGE_200
+          message: MESSAGE_STATUS
         });
       } else {
         res.status(404).json({

@@ -5,20 +5,19 @@ import { ResponseType } from "../../utils";
 import { AuthController } from "../authentication";
 import * as jwt from 'jsonwebtoken';
 import app from "../../app";
+import { generateCode } from "../../utils/codeGenerator";
 
 const MESSAGE_CREATE = 'Table was successfully created';
 const MESSAGE_UPDATE = 'Table was successfully updated';
 const MESSAGE_DELETE = 'Table was successfully deleted';
 const MESSAGE_CLAIMED = 'Successfully signed in';
-const MESSAGE_NOT_AVAILABLE = 'This table is currently unavailable';
-const MESSAGE_REQUESTS_OFF = 'The people at this table have dissabled any new join requests';
 const MESSAGE_SEATS_TAKEN = 'All the seats are already taken at this table';
 const MESSAGE_404 = 'Couldn\'t find requested table';
-const MESSAGE_403 = 'You don\'t have permission to do this';
 const MESSAGE_USER_ERROR = 'Something went wrong trying to authenticate';
 const MESSAGE_REQUESTS_TOGGLED_ON = 'Requests to join this table have been enabled';
 const MESSAGE_REQUESTS_TOGGLED_OFF = 'Requests to join this table have been disabled';
 const MESSAGE_REQUEST_NEEDED = 'You have to request access to this table first';
+const MESSAGE_REQUEST_CODE_INCORRECT = 'The code you entered is incorrect';
 
 export class TableController {
   public index = async (req: Request, res: Response) => {
@@ -291,7 +290,7 @@ export class TableController {
   };
 
   public claim = async (table: Table, req: Request, res: Response) => {
-    const { displayName } = req.body;
+    const { displayName, requestCode } = req.body;
 
     let tableClaim = await TableClaim.findOne({
       where: {
@@ -301,6 +300,14 @@ export class TableController {
     });
 
     if (tableClaim) {
+      if (tableClaim.requestCode !== requestCode) {
+        return res.status(400).json({
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: MESSAGE_REQUEST_CODE_INCORRECT
+        });
+      }
+
       const customers = await Customer.findAll({
         where: {
           tableClaimId: tableClaim.id
@@ -317,10 +324,13 @@ export class TableController {
         });
       }
     } else {
+      const requestCode = generateCode(6);
+
       tableClaim = await TableClaim.create({
         tableId: table.id,
         status: TableClaimStatus.ACTIVE,
-        requestsEnabled: false
+        requestsEnabled: false,
+        requestCode
       });
     }
 
@@ -366,8 +376,11 @@ export class TableController {
     }
 
     if (tableClaim) {
+      const requestCode = generateCode(6);
+
       await tableClaim.update({
-        requestsEnabled: !tableClaim.getDataValue('requestsEnabled')
+        requestsEnabled: !tableClaim.getDataValue('requestsEnabled'),
+        requestCode
       })
         .then(() => {
           res.status(200).json({

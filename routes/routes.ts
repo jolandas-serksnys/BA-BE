@@ -94,6 +94,8 @@ export class Routes {
       .post(verifyToken, this.orderController.calculatePrice);
     app.route(`${process.env.BASE_URL}/order/table`)
       .post(verifyToken, this.orderController.getTableOrder);
+    app.route(`${process.env.BASE_URL}/order/table/:id/toggle`)
+      .post([verifyToken, isEmployee], this.orderController.toggleTableOrderClaim);
     app.route(`${process.env.BASE_URL}/order/:id/cancel`)
       .post(verifyToken, this.orderController.cancel);
     app.route(`${process.env.BASE_URL}/order/active`)

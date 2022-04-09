@@ -13,12 +13,14 @@ export class TableClaimInteface {
   tableId: number;
   requestsEnabled: boolean;
   status: TableClaimStatus;
+  requestCode: string;
 }
 
 export class TableClaim extends BaseModel {
   declare tableId: number;
   declare requestsEnabled: boolean;
   declare status: TableClaimStatus;
+  declare requestCode: string;
 }
 
 TableClaim.init(
@@ -36,6 +38,11 @@ TableClaim.init(
       allowNull: false,
       defaultValue: 'ACTIVE',
     },
+    requestCode: {
+      type: new DataTypes.STRING(6),
+      allowNull: true,
+      defaultValue: '',
+    }
   },
   {
     tableName: 'table_claims',
