@@ -28,6 +28,8 @@ export class Routes {
       .post(this.authController.customerSignIn);
     app.route(`${process.env.BASE_URL}/claimed`)
       .get([verifyToken], this.tablesController.getClaimed);
+    app.route(`${process.env.BASE_URL}/toggle-access-requests`)
+      .post([verifyToken], this.tablesController.toggleAccessRequests);
 
     app.route(`${process.env.BASE_URL}/employee/sign-in`)
       .post(this.authController.employeeSignIn);

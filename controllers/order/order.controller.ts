@@ -10,7 +10,7 @@ import { TableController } from "../table";
 
 const MESSAGE_404 = 'Table order not found.';
 const MESSAGE_200 = 'Order has been accepted.';
-const MESSAGE_NEW_ORDER = 'Once you make an order, it will appear here.';
+const MESSAGE_STATUS = 'Order status has been updated.';
 
 export class OrderController {
   public async calculatePrice(req: Request, res: Response) {
@@ -29,11 +29,15 @@ export class OrderController {
       }
 
       res.status(200).json({
-        isSuccessful: true, type: ResponseType.SUCCESS, data: price
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: price
       });
     } catch (error) {
       res.status(400).json({
-        isSuccessful: false, type: ResponseType.DANGER, data: error
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
       });
     }
   }
@@ -42,17 +46,31 @@ export class OrderController {
     try {
       const { tableClaimId, dishId, options, comment } = req.body;
       const { userId } = await new AuthController().getUser(req);
-      const claimClients = await new TableController().getSocketsByClaimId(tableClaimId);
+      const claimClients = await new TableController().getRelevantSocketClients(tableClaimId);
 
       let tableOrder;
 
-      await TableOrder.findOne({ where: { tableClaimId: tableClaimId, status: TableOrderStatus.ACTIVE } })
+      await TableOrder.findOne({
+        where: {
+          tableClaimId: tableClaimId,
+          status: TableOrderStatus.ACTIVE
+        }
+      })
         .then(async (node) => {
           if (node) {
             tableOrder = node;
           } else {
-            await TableOrder.create({ tableClaimId: tableClaimId, status: TableOrderStatus.ACTIVE });
-            tableOrder = await TableOrder.findOne({ where: { tableClaimId: tableClaimId, status: TableOrderStatus.ACTIVE } });
+            await TableOrder.create({
+              tableClaimId: tableClaimId,
+              status: TableOrderStatus.ACTIVE
+            });
+
+            tableOrder = await TableOrder.findOne({
+              where: {
+                tableClaimId: tableClaimId,
+                status: TableOrderStatus.ACTIVE
+              }
+            });
           }
         });
 
@@ -102,11 +120,15 @@ export class OrderController {
       });
 
       res.status(200).json({
-        isSuccessful: true, type: ResponseType.SUCCESS, message: MESSAGE_200
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        message: MESSAGE_200
       });
     } catch (error) {
       res.status(400).json({
-        isSuccessful: false, type: ResponseType.DANGER, data: error
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
       });
     }
   }
@@ -140,16 +162,21 @@ export class OrderController {
 
       if (tableOrder) {
         res.status(200).json({
-          isSuccessful: true, type: ResponseType.SUCCESS, data: tableOrder
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          data: tableOrder
         });
       } else {
         res.status(200).json({
-          isSuccessful: true, type: ResponseType.DANGER, message: MESSAGE_NEW_ORDER
+          isSuccessful: true,
+          type: ResponseType.SUCCESS
         });
       }
     } catch (error) {
       res.status(400).json({
-        isSuccessful: false, type: ResponseType.DANGER, data: error
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
       });
     }
   }
@@ -171,10 +198,12 @@ export class OrderController {
         });
 
         const tableOrder = await TableOrder.findByPk(customerOrder.tableOrderId);
-        const claimClients = await new TableController().getSocketsByClaimId(tableOrder.tableClaimId);
+        const claimClients = await new TableController().getRelevantSocketClients(tableOrder.tableClaimId);
 
         res.status(200).json({
-          isSuccessful: true, type: ResponseType.SUCCESS, message: MESSAGE_200
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          message: MESSAGE_200
         });
 
         claimClients.forEach((client) => {
@@ -182,12 +211,16 @@ export class OrderController {
         });
       } else {
         res.status(404).json({
-          isSuccessful: false, type: ResponseType.DANGER, message: MESSAGE_404
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: MESSAGE_404
         });
       }
     } catch (error) {
       res.status(400).json({
-        isSuccessful: false, type: ResponseType.DANGER, data: error
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
       });
     }
   };
@@ -218,7 +251,7 @@ export class OrderController {
       const tableOrder = await TableOrder.findByPk(customerOrder.tableOrderId);
 
       if (customerOrder) {
-        const claimClients = await new TableController().getSocketsByClaimId(tableOrder.tableClaimId);
+        const claimClients = await new TableController().getRelevantSocketClients(tableOrder.tableClaimId);
 
         await customerOrder.update({
           status: status
@@ -229,16 +262,22 @@ export class OrderController {
         });
 
         res.status(200).json({
-          isSuccessful: true, type: ResponseType.SUCCESS, message: MESSAGE_200, data: customerOrder
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          message: MESSAGE_STATUS, data: customerOrder
         });
       } else {
         res.status(404).json({
-          isSuccessful: false, type: ResponseType.DANGER, message: MESSAGE_404
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: MESSAGE_404
         });
       }
     } catch (error) {
       res.status(400).json({
-        isSuccessful: false, type: ResponseType.DANGER, data: error
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
       });
     }
   };
@@ -287,7 +326,46 @@ export class OrderController {
     });
 
     res.status(200).json({
-      isSuccessful: true, type: ResponseType.SUCCESS, data: activeTableOrders
+      isSuccessful: true,
+      type: ResponseType.SUCCESS,
+      data: activeTableOrders
     });
+  };
+
+  public closeTableOrder = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.body;
+      const tableOrder = await TableOrder.findByPk(id);
+
+      if (tableOrder) {
+        await tableOrder.update({
+          status: TableOrderStatus.CLOSED
+        });
+
+        const claimClients = await new TableController().getRelevantSocketClients(tableOrder.tableClaimId);
+
+        claimClients.forEach((client) => {
+          app.io.to(client.id).emit('status', true);
+        });
+
+        res.status(200).json({
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          message: MESSAGE_200
+        });
+      } else {
+        res.status(404).json({
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: MESSAGE_404
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
+      });
+    }
   };
 }
