@@ -101,7 +101,7 @@ export class Routes {
     app.route(`${process.env.BASE_URL}/order/:id/cancel`)
       .post(verifyToken, this.orderController.cancel);
     app.route(`${process.env.BASE_URL}/order/active`)
-      .get([verifyToken, isEmployee], this.orderController.getActiveOrders);
+      .post([verifyToken, isEmployee], this.orderController.getActiveOrders);
     app.route(`${process.env.BASE_URL}/order/:id/status`)
       .post([verifyToken, isEmployee], this.orderController.updateStatus);
   }

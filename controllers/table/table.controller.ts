@@ -300,7 +300,7 @@ export class TableController {
     });
 
     if (tableClaim) {
-      if (tableClaim.requestCode !== requestCode) {
+      if (tableClaim.requestsEnabled && tableClaim.requestCode !== requestCode) {
         return res.status(400).json({
           isSuccessful: false,
           type: ResponseType.DANGER,

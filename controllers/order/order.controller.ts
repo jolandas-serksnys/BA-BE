@@ -7,6 +7,7 @@ import app from "../../app";
 import { AuthController } from "../authentication";
 import { Customer, Table, TableClaim, TableClaimStatus } from "../../models";
 import { TableController } from "../table";
+import { Op } from "sequelize";
 
 const MESSAGE_404 = 'Table order not found.';
 const MESSAGE_200 = 'Order has been accepted.';
@@ -283,9 +284,21 @@ export class OrderController {
   };
 
   public getActiveOrders = async (req: Request, res: Response) => {
+    const { dateFrom: reqDateFrom, dateTo: reqDateTo, query } = req.body;
+
+    const dateFrom = new Date();
+    dateFrom.setHours(0, 0, 0, 0);
+
+    const dateTo = new Date();
+    dateTo.setHours(0, 0, 0, 0);
+    dateTo.setDate(dateTo.getDate() + 1);
+
     const activeTableOrders = await TableOrder.findAll({
       where: {
-        status: TableOrderStatus.ACTIVE
+        status: TableOrderStatus.ACTIVE,
+        createdAt: {
+          [Op.between]: [reqDateFrom || dateFrom, reqDateTo || dateTo]
+        }
       },
       include: [
         {
@@ -325,10 +338,16 @@ export class OrderController {
       order: [['updatedAt', 'DESC']]
     });
 
+    const filteredData = !query ? activeTableOrders : activeTableOrders.filter((order) =>
+      order.getDataValue('table_claim').table.displayName.toLowerCase().includes(query.toLowerCase())
+      || order.getDataValue('customer_orders').some((customerOrder) => customerOrder.status?.toLowerCase().includes(query.toLowerCase()))
+      || order.getDataValue('customer_orders').some((customerOrder) => customerOrder.title.toLowerCase().includes(query.toLowerCase()))
+    );
+
     res.status(200).json({
       isSuccessful: true,
       type: ResponseType.SUCCESS,
-      data: activeTableOrders
+      data: filteredData
     });
   };
 
@@ -354,7 +373,8 @@ export class OrderController {
         res.status(200).json({
           isSuccessful: true,
           type: ResponseType.SUCCESS,
-          message: MESSAGE_STATUS
+          message: MESSAGE_STATUS,
+          data: tableClaim
         });
       } else {
         res.status(404).json({
