@@ -15,9 +15,32 @@ export class DishController {
   public index = async (req: Request, res: Response) => {
     const { categoryId } = req.params;
 
-    await Dish.findAll<Dish>({
+    await Dish.findAll({
       where: {
-        categoryId: categoryId
+        categoryId,
+        isVisible: true
+      },
+      include: [
+        {
+          model: Tag,
+          as: 'tags',
+        }
+      ]
+    })
+      .then((nodes: Array<Dish>) => res.json({
+        isSuccessful: true, type: ResponseType.SUCCESS, data: nodes
+      }))
+      .catch((error: Error) => res.status(500).json({
+        isSuccessful: false, type: ResponseType.DANGER, message: error
+      }));
+  }
+
+  public indexEmployee = async (req: Request, res: Response) => {
+    const { categoryId } = req.params;
+
+    await Dish.findAll({
+      where: {
+        categoryId
       },
       include: [
         {

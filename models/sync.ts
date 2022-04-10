@@ -2,7 +2,7 @@ import { Category } from "./menu/category";
 import { Customer } from "./customer";
 import { Dish } from "./menu/dish";
 import { Employee, SignUpCode } from "./employee";
-import { Establishment } from "./establishment";
+import { Establishment, EstablishmentType } from "./establishment";
 import { Table, TableClaim } from "./table";
 import { Addon } from "./menu/addon";
 import { Option } from "./menu/option";
@@ -30,6 +30,16 @@ export const Sync = async () => {
     await TableOrder.sync({ force: true }).then(() => console.log("Table Orders table created"));
     await CustomerOrder.sync({ force: true }).then(() => console.log("Customer Orders table created"));
     await OrderAddon.sync({ force: true }).then(() => console.log("Orders addons table created"));
+    */
+
+    // Defaults
+
+    /*
+    Establishment.create({
+      title: 'Delish',
+      description: 'Change these details in admin panel',
+      type: EstablishmentType.RESTAURANT
+    });
     */
   } catch (error) {
     console.error(error);

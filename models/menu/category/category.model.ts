@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { database } from "../../../config/database.config";
 import { BaseModel } from "../../base.model";
-import { Dish } from "../dish";
 import { Establishment } from "../../establishment";
+import { Dish } from "../dish";
 
 export interface CategoryInterface {
   title: string;
@@ -32,11 +32,7 @@ Category.init(
       type: new DataTypes.BOOLEAN,
       defaultValue: true,
       allowNull: false,
-    },
-    establishmentId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-    },
+    }
   },
   {
     tableName: 'categories',
@@ -44,9 +40,22 @@ Category.init(
   }
 );
 
-Category.belongsTo(Establishment, {
-  foreignKey: 'establishmentId'
-});
+Category.belongsTo(Establishment,
+  {
+    foreignKey: 'establishmentId',
+  }
+);
 
-Category.hasMany(Dish, { as: 'dishes', foreignKey: 'categoryId' });
-Dish.belongsTo(Category, { foreignKey: 'categoryId', onDelete: 'cascade' });
+Category.hasMany(Dish,
+  {
+    as: 'dishes',
+    foreignKey: 'categoryId'
+  }
+);
+
+Dish.belongsTo(Category,
+  {
+    foreignKey: 'categoryId',
+    onDelete: 'cascade'
+  }
+);

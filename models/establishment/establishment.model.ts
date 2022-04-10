@@ -3,11 +3,11 @@ import { database } from "../../config/database.config";
 import { BaseModel } from "../base.model";
 
 export enum EstablishmentType {
-  CAFE,
-  RESTAURANT,
-  BAR,
-  CANTEEN,
-  OTHER
+  CAFE = 'CAFE',
+  RESTAURANT = 'RESTAURANT',
+  BAR = 'BAR',
+  CANTEEN = 'CANTEEN',
+  OTHER = 'OTHER'
 }
 
 export interface EstablishmentInterface {

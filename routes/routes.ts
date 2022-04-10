@@ -79,6 +79,8 @@ export class Routes {
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish`)
       .get(this.dishController.index)
       .post([verifyToken, isAdmin], this.dishController.create);
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/all`)
+      .get(this.dishController.indexEmployee);
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/:id`)
       .get(this.dishController.get)
       .put([verifyToken, isAdmin], this.dishController.update)

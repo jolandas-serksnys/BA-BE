@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { database } from "../../../config/database.config";
 import { BaseModel } from "../../base.model";
+import { Category } from "../category";
 import { Tag } from "../tag/tag.model";
 
 export interface DishInterface {

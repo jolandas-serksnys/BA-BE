@@ -13,29 +13,19 @@ const MESSAGE_404 = 'Couldn\'t find requested category';
 
 export class CategoryController {
   public index = async (req: Request, res: Response) => {
-    await Category.findAll<Category>({
-      include: [
-        {
-          model: Dish,
-          as: 'dishes',
-          include: [
-            {
-              model: Tag,
-              as: 'tags'
-            }
-          ],
-          where: {
-            isVisible: true,
-          }
-        }
-      ]
+    const { establishmentId } = req.params;
+
+    const categories = await Category.findAll({
+      where: {
+        establishmentId
+      }
+    });
+
+    return res.json({
+      isSuccessful: true,
+      type: ResponseType.SUCCESS,
+      data: categories
     })
-      .then((nodes: Array<Category>) => res.json({
-        isSuccessful: true, type: ResponseType.SUCCESS, data: nodes
-      }))
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false, type: ResponseType.DANGER, message: error
-      }));
   }
 
   public create = async (req: Request, res: Response) => {

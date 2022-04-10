@@ -8,12 +8,14 @@ export interface AddonInterface {
   title: string;
   isOptional: boolean;
   dishId: number;
+  isMultiple: boolean;
 }
 
 export class Addon extends BaseModel {
   declare title: string;
   declare isOptional: boolean;
   declare dishId: number;
+  declare isMultiple: boolean;
 }
 
 Addon.init(
@@ -23,6 +25,11 @@ Addon.init(
       allowNull: false,
     },
     isOptional: {
+      type: new DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+    isMultiple: {
       type: new DataTypes.BOOLEAN,
       defaultValue: true,
       allowNull: false,
