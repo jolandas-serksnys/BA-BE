@@ -473,13 +473,15 @@ export class TableController {
   public getRelevantSocketClients = async (tableClaimId) => {
     const sockets = await app.io.fetchSockets();
 
-    return sockets.map((s) => ({
+    const relevantSockets = sockets.map((s) => ({
       claimId: s.handshake.query.tableClaim,
       isEmployee: s.handshake.query.isEmployee,
       id: s.id
     })).filter((c) =>
-      c.claimId == tableClaimId
-      || c.isEmployee
+      Number(c.claimId) === Number(tableClaimId)
+      || c.isEmployee === 'true'
     );
+
+    return relevantSockets;
   };
 };
