@@ -17,9 +17,9 @@ export interface EstablishmentInterface {
 }
 
 export class Establishment extends BaseModel {
-  public title!: string;
-  public description!: string;
-  public type!: EstablishmentType;
+  declare title: string;
+  declare description: string;
+  declare type: EstablishmentType;
 }
 
 Establishment.init(

@@ -7,7 +7,7 @@ export enum EmployeeRole {
   GENERAL = 'GENERAL',
   WAITER = 'WAITER',
   ADMINISTRATOR = 'ADMINISTRATOR',
-  RECEPTIONIS = 'RECEPTIONIS',
+  RECEPTIONIST = 'RECEPTIONIST',
   KITCHEN = 'KITCHEN',
   OTHER = 'OTHER'
 }
@@ -46,7 +46,7 @@ Employee.init(
         'GENERAL',
         'WAITER',
         'ADMINISTRATOR',
-        'RECEPTIONIS',
+        'RECEPTIONIST',
         'KITCHEN',
         'OTHER'
       ),
@@ -91,7 +91,7 @@ SignUpCode.init(
         'GENERAL',
         'WAITER',
         'ADMINISTRATOR',
-        'RECEPTIONIS',
+        'RECEPTIONIST',
         'KITCHEN',
         'OTHER'
       ),

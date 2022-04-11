@@ -40,13 +40,19 @@ export class Routes {
     app.route(`${process.env.BASE_URL}/employee/update-password`)
       .post([verifyToken, isEmployee], this.authController.employeeUpdatePassword);
 
-    app.route(`${process.env.BASE_URL}/employee`)
-      .get([verifyToken, isAdmin], this.employeeController.index)
-      .post([verifyToken, isAdmin], this.employeeController.create);
-    app.route(`${process.env.BASE_URL}/employee/:id`)
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/employee`)
+      .get([verifyToken, isAdmin], this.employeeController.index);
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/employee/:id`)
       .get([verifyToken, isAdmin], this.employeeController.get)
       .put([verifyToken, isAdmin], this.employeeController.update)
       .delete([verifyToken, isAdmin], this.employeeController.delete);
+
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/sign-up-code`)
+      .get([verifyToken, isAdmin], this.employeeController.indexSignUpCodes)
+      .post([verifyToken, isAdmin], this.employeeController.createSignUpCode);
+
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/sign-up-code/:id`)
+      .delete([verifyToken, isAdmin], this.employeeController.deleteSignUpCode);
 
     app.route(`${process.env.BASE_URL}/establishment`)
       .get([verifyToken, isAdmin], this.establishmentController.index)
