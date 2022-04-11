@@ -16,7 +16,7 @@ const MESSAGE_STATUS = 'Order status has been updated.';
 export class OrderController {
   public async calculatePrice(req: Request, res: Response) {
     try {
-      const { dishId, options }: OrderPriceRequestInterface = req.body;
+      const { dishId, options, quantity }: OrderPriceRequestInterface = req.body;
       let price = 0.0;
 
       await Dish.findByPk(dishId)
@@ -32,7 +32,7 @@ export class OrderController {
       res.status(200).json({
         isSuccessful: true,
         type: ResponseType.SUCCESS,
-        data: price
+        data: price * quantity
       });
     } catch (error) {
       res.status(400).json({
@@ -45,7 +45,7 @@ export class OrderController {
 
   public processOrder = async (req: Request, res: Response) => {
     try {
-      const { tableClaimId, dishId, options, comment } = req.body;
+      const { tableClaimId, dishId, options, comment, quantity } = req.body;
       const { userId } = await new AuthController().getUser(req);
       const claimClients = await new TableController().getRelevantSocketClients(tableClaimId);
 
@@ -113,7 +113,8 @@ export class OrderController {
 
       await customerOrder.update({
         price: price,
-        totalPrice: totalPrice
+        totalPrice: totalPrice * quantity,
+        quantity
       });
 
       claimClients.forEach((client) => {
@@ -144,7 +145,6 @@ export class OrderController {
         include: {
           model: CustomerOrder,
           as: 'customer_orders',
-          attributes: ['id', 'title', 'status', 'comment', 'price', 'totalPrice', 'createdAt', 'updatedAt'],
           include: [
             {
               model: OrderAddon,

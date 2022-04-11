@@ -7,6 +7,7 @@ import { TableClaim } from "../table";
 export interface OrderPriceRequestInterface {
   dishId: number;
   options: number[];
+  quantity: number;
 }
 
 export enum TableOrderStatus {
@@ -47,6 +48,7 @@ export class CustomerOrder extends BaseModel {
   declare dishId: number;
   declare tableOrderId: number;
   declare ownerId: number;
+  declare quantity: number;
 }
 
 export class OrderAddon extends BaseModel {
@@ -100,6 +102,11 @@ CustomerOrder.init(
     totalPrice: {
       type: new DataTypes.DECIMAL(10, 2)
     },
+    quantity: {
+      type: new DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+    }
   },
   {
     tableName: 'customer_orders',
