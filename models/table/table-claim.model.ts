@@ -14,6 +14,7 @@ export class TableClaimInteface {
   requestsEnabled: boolean;
   status: TableClaimStatus;
   requestCode: string;
+  allowSeatsBypass: boolean;
 }
 
 export class TableClaim extends BaseModel {
@@ -21,6 +22,7 @@ export class TableClaim extends BaseModel {
   declare requestsEnabled: boolean;
   declare status: TableClaimStatus;
   declare requestCode: string;
+  declare allowSeatsBypass: boolean;
 }
 
 TableClaim.init(
@@ -28,7 +30,7 @@ TableClaim.init(
     requestsEnabled: {
       type: new DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: 1,
+      defaultValue: 0,
     },
     status: {
       type: DataTypes.ENUM(
@@ -42,7 +44,12 @@ TableClaim.init(
       type: new DataTypes.STRING(6),
       allowNull: true,
       defaultValue: '',
-    }
+    },
+    allowSeatsBypass: {
+      type: new DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0,
+    },
   },
   {
     tableName: 'table_claims',

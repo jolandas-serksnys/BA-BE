@@ -304,7 +304,7 @@ export class OrderController {
         {
           model: TableClaim,
           as: 'table_claim',
-          attributes: ['id', 'tableId', 'status'],
+          attributes: ['id', 'tableId', 'status', 'allowSeatsBypass'],
           include: [
             {
               model: Table,
@@ -334,8 +334,7 @@ export class OrderController {
             }
           ]
         }
-      ],
-      order: [['updatedAt', 'DESC']]
+      ]
     });
 
     const filteredData = !query ? activeTableOrders : activeTableOrders.filter((order) =>

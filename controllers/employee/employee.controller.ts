@@ -32,7 +32,9 @@ export class EmployeeController {
       where: {
         id,
         establishmentId
-      }
+      },
+      attributes: ['id', 'firstName', 'lastName', 'email', 'role']
+
     })
       .then((Employee: Employee | null) => {
         if (Employee) {

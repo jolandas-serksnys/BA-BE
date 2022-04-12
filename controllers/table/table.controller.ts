@@ -18,6 +18,8 @@ const MESSAGE_REQUESTS_TOGGLED_ON = 'Requests to join this table have been enabl
 const MESSAGE_REQUESTS_TOGGLED_OFF = 'Requests to join this table have been disabled';
 const MESSAGE_REQUEST_NEEDED = 'You have to request access to this table first';
 const MESSAGE_REQUEST_CODE_INCORRECT = 'The code you entered is incorrect';
+const MESSAGE_SEATS_BYPASS_TOGGLED_ON = 'Seats limit bypass has been enabled';
+const MESSAGE_SEATS_BYPASS_TOGGLED_OFF = 'Seats limit bypass has been disabled';
 
 export class TableController {
   public index = async (req: Request, res: Response) => {
@@ -484,4 +486,38 @@ export class TableController {
 
     return relevantSockets;
   };
+
+  public toggleSeatsLimitBypass = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const tableClaim = await TableClaim.findByPk(id);
+
+      await tableClaim.update({
+        allowSeatsBypass: !tableClaim.allowSeatsBypass
+      });
+
+      const claimClients = await new TableController().getRelevantSocketClients(tableClaim.id);
+
+      claimClients.forEach((client) => {
+        app.io.to(client.id).emit('status', true);
+      });
+
+      res.status(200).json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        message: tableClaim.allowSeatsBypass
+          ? MESSAGE_SEATS_BYPASS_TOGGLED_ON
+          : MESSAGE_SEATS_BYPASS_TOGGLED_OFF,
+        data: {
+          allowSeatsBypass: tableClaim.allowSeatsBypass
+        }
+      });
+    } catch (error) {
+      res.status(400).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
+      });
+    }
+  }
 };

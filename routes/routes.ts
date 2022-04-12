@@ -110,5 +110,8 @@ export class Routes {
       .post([verifyToken, isEmployee], this.orderController.getActiveOrders);
     app.route(`${process.env.BASE_URL}/order/:id/status`)
       .post([verifyToken, isEmployee], this.orderController.updateStatus);
+
+    app.route(`${process.env.BASE_URL}/claim/:id/toggle-seats-limit`)
+      .post([verifyToken, isEmployee], this.tablesController.toggleSeatsLimitBypass);
   }
 }
