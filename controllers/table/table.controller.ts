@@ -18,8 +18,8 @@ const MESSAGE_REQUESTS_TOGGLED_ON = 'Requests to join this table have been enabl
 const MESSAGE_REQUESTS_TOGGLED_OFF = 'Requests to join this table have been disabled';
 const MESSAGE_REQUEST_NEEDED = 'You have to request access to this table first';
 const MESSAGE_REQUEST_CODE_INCORRECT = 'The code you entered is incorrect';
-const MESSAGE_SEATS_BYPASS_TOGGLED_ON = 'Seats limit bypass has been enabled';
-const MESSAGE_SEATS_BYPASS_TOGGLED_OFF = 'Seats limit bypass has been disabled';
+const MESSAGE_SEATS_LIMIT_ON = 'Seats limit has been enabled';
+const MESSAGE_SEATS_LIMIT_OFF = 'Seats limit has been disabled';
 
 export class TableController {
   public index = async (req: Request, res: Response) => {
@@ -505,9 +505,9 @@ export class TableController {
       res.status(200).json({
         isSuccessful: true,
         type: ResponseType.SUCCESS,
-        message: tableClaim.allowSeatsBypass
-          ? MESSAGE_SEATS_BYPASS_TOGGLED_ON
-          : MESSAGE_SEATS_BYPASS_TOGGLED_OFF,
+        message: !tableClaim.allowSeatsBypass
+          ? MESSAGE_SEATS_LIMIT_ON
+          : MESSAGE_SEATS_LIMIT_OFF,
         data: {
           allowSeatsBypass: tableClaim.allowSeatsBypass
         }
