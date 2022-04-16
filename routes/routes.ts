@@ -110,6 +110,10 @@ export class Routes {
       .post([verifyToken, isEmployee], this.orderController.getActiveOrders);
     app.route(`${process.env.BASE_URL}/order/:id/status`)
       .post([verifyToken, isEmployee], this.orderController.updateStatus);
+    app.route(`${process.env.BASE_URL}/order/receipts`)
+      .get([verifyToken], this.orderController.getOrderReceipts);
+    app.route(`${process.env.BASE_URL}/order/receipt/user`)
+      .get([verifyToken], this.orderController.getCustomerReceipt);
 
     app.route(`${process.env.BASE_URL}/claim/:id/toggle-seats-limit`)
       .post([verifyToken, isEmployee], this.tablesController.toggleSeatsLimitBypass);

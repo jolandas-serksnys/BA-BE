@@ -253,7 +253,7 @@ export class TableController {
 
       const seatsTaken = customers.length;
 
-      if (seatsTaken >= table.seats) {
+      if (!tableClaim.allowSeatsBypass && seatsTaken >= table.seats) {
         return res.status(400).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
@@ -318,7 +318,7 @@ export class TableController {
 
       const seatsTaken = customers.length;
 
-      if (seatsTaken >= table.seats) {
+      if (!tableClaim.allowSeatsBypass && seatsTaken >= table.seats) {
         return res.status(400).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
@@ -364,7 +364,7 @@ export class TableController {
   };
 
   public toggleAccessRequests = async (req: Request, res: Response) => {
-    const { userId } = await new AuthController().getUser(req);
+    const { userId } = req.body;
 
     const customer = await Customer.findByPk(userId);
     const tableClaim = await TableClaim.findByPk(customer.getDataValue('tableClaimId'));
@@ -408,7 +408,7 @@ export class TableController {
   };
 
   public getClaimed = async (req: Request, res: Response) => {
-    const { userId } = await new AuthController().getUser(req);
+    const { userId } = req.body;
 
     if (!userId) {
       return res.status(401).json({

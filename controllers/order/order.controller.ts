@@ -4,7 +4,6 @@ import { Option } from "../../models/menu/option/option.model";
 import { CustomerOrder, CustomerOrderStatus, OrderAddon, OrderPriceRequestInterface, TableOrder, TableOrderStatus } from "../../models/order";
 import { ResponseType } from "../../utils";
 import app from "../../app";
-import { AuthController } from "../authentication";
 import { Customer, Table, TableClaim, TableClaimStatus } from "../../models";
 import { TableController } from "../table";
 import { Op } from "sequelize";
@@ -45,8 +44,7 @@ export class OrderController {
 
   public processOrder = async (req: Request, res: Response) => {
     try {
-      const { tableClaimId, dishId, options, comment, quantity } = req.body;
-      const { userId } = await new AuthController().getUser(req);
+      const { tableClaimId, dishId, options, comment, quantity, userId } = req.body;
       const claimClients = await new TableController().getRelevantSocketClients(tableClaimId);
 
       let tableOrder;
@@ -184,8 +182,7 @@ export class OrderController {
 
   public cancel = async (req: Request, res: Response) => {
     try {
-      const { id } = req.body;
-      const { userId } = await new AuthController().getUser(req);
+      const { id, userId } = req.body;
       const customerOrder = await CustomerOrder.findOne({
         where: {
           id: id,
@@ -390,4 +387,92 @@ export class OrderController {
       });
     }
   };
+
+  public getCustomerReceipt = async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.body;
+
+      const customerOrders = await CustomerOrder.findAll({
+        where: {
+          ownerId: userId
+        },
+        include: [
+          {
+            model: OrderAddon,
+            as: 'order_addons',
+            attributes: ['title', 'price']
+          }
+        ]
+      });
+
+      const totalPrice = customerOrders.reduce((acc, order) => Number(acc) + Number(order.totalPrice), 0);
+
+      res.status(200).json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: {
+          orders: customerOrders,
+          totalPrice
+        }
+      });
+    } catch (error) {
+      res.status(400).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
+      });
+    }
+  }
+
+  public getOrderReceipts = async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.body;
+      const customer = await Customer.findByPk(userId);
+      const tableOrder = await TableOrder.findOne({
+        where: {
+          tableClaimId: customer.tableClaimId
+        },
+        attributes: ['id'],
+      });
+
+      const customerOrders = await CustomerOrder.findAll({
+        where: {
+          tableOrderId: tableOrder.id,
+          ownerId: {
+            [Op.ne]: userId
+          }
+        },
+        include: [
+          {
+            model: OrderAddon,
+            as: 'order_addons',
+            attributes: ['title', 'price']
+          },
+          {
+            model: Customer,
+            as: 'owner',
+            attributes: ['displayName', 'id']
+          }
+        ],
+        order: [['ownerId', 'DESC']]
+      });
+
+      const totalPrice = customerOrders.reduce((acc, order) => Number(acc) + Number(order.totalPrice), 0);
+
+      res.status(200).json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: {
+          orders: customerOrders,
+          totalPrice
+        }
+      });
+    } catch (error) {
+      res.status(400).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
+      });
+    }
+  }
 }

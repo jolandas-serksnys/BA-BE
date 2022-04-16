@@ -31,7 +31,7 @@ export class CategoryController {
   public create = async (req: Request, res: Response) => {
     const params: CategoryInterface = req.body;
 
-    const { userId } = await new AuthController().getUser(req);
+    const { userId } = req.body;
     const user = await Employee.findByPk(userId);
 
     params.establishmentId = user.getDataValue('establishmentId');
