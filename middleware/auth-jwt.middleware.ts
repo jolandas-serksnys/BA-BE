@@ -1,7 +1,7 @@
+import { config } from "../config";
+import { Employee, EmployeeRole } from "../models";
 import { NextFunction, Request, Response } from "express";
-import * as jwt from 'jsonwebtoken';
-import { config } from "../../config";
-import { Employee, EmployeeRole } from "../../models";
+import * as jwt from "jsonwebtoken";
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization.split(' ')[1];

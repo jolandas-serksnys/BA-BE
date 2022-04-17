@@ -1,6 +1,6 @@
+import { BaseModel } from "./base.model";
+import { database } from "../config/database.config";
 import { DataTypes } from "sequelize";
-import { database } from "../../config/database.config";
-import { BaseModel } from "../base.model";
 
 export enum EstablishmentType {
   CAFE = 'CAFE',

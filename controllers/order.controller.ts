@@ -2,20 +2,18 @@ import { TableClaimController } from "./tableClaim.controller";
 import app from "../app";
 import {
   Customer,
-  Table,
-  TableClaim,
-  TableClaimStatus
-} from "../models";
-import { Dish } from "../models/menu/dish/dish.model";
-import { Option } from "../models/menu/option/option.model";
-import {
   CustomerOrder,
   CustomerOrderStatus,
+  Dish,
+  Option,
   OrderAddon,
   OrderPriceRequestInterface,
+  Table,
+  TableClaim,
+  TableClaimStatus,
   TableOrder,
   TableOrderStatus
-} from "../models/order";
+} from "../models";
 import { ResponseType } from "../utils";
 import { Request, Response } from "express";
 import { Op } from "sequelize";

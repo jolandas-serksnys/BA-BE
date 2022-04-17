@@ -1,7 +1,10 @@
-import { Dish, DishInterface } from "../models";
-import { Addon } from "../models/menu/addon";
-import { Option } from "../models/menu/option";
-import { Tag } from "../models/menu/tag";
+import {
+  Addon,
+  Dish,
+  DishInterface,
+  Option,
+  Tag
+} from "../models";
 import { ResponseType } from "../utils";
 import { Request, Response } from "express";
 import { DestroyOptions, UpdateOptions } from "sequelize";

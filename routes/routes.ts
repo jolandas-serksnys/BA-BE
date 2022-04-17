@@ -1,14 +1,19 @@
 import {
   AuthController,
-  TableController,
-  EmployeeController,
-  EstablishmentController,
   CategoryController,
   DishController,
+  EmployeeController,
+  EstablishmentController,
   OrderController,
-  TableClaimController
+  TableClaimController,
+  TableController
 } from "../controllers";
-import { checkDuplicate, isAdmin, isEmployee, verifyToken } from "../middleware";
+import {
+  checkDuplicate,
+  isAdmin,
+  isEmployee,
+  verifyToken
+} from "../middleware";
 
 export class Routes {
   public authController: AuthController = new AuthController();

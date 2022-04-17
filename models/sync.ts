@@ -1,13 +1,14 @@
-import { Category } from "./menu/category";
-import { Customer } from "./customer";
-import { Dish } from "./menu/dish";
-import { Employee, SignUpCode } from "./employee";
-import { Establishment, EstablishmentType } from "./establishment";
-import { Table, TableClaim } from "./table";
-import { Addon } from "./menu/addon";
-import { Option } from "./menu/option";
-import { CustomerOrder, OrderAddon, TableOrder } from "./order";
-import { Tag } from "./menu/tag";
+import { Addon } from "./addon.model";
+import { Category } from "./category.model";
+import { Customer } from "./customer.model";
+import { Dish } from "./dish.model";
+import { Employee, SignUpCode } from "./employee.model";
+import { Establishment, EstablishmentType } from "./establishment.model";
+import { Option } from "./option.model";
+import { CustomerOrder, OrderAddon, TableOrder } from "./order.model";
+import { Table } from "./table.model";
+import { TableClaim } from "./tableClaim.model";
+import { Tag } from "./tag.model";
 
 export const Sync = async () => {
   try {

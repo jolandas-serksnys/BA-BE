@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { Customer } from "../customer";
-import { database } from "../../config/database.config";
-import { BaseModel } from "../base.model";
+import { BaseModel } from "./base.model";
+import { Customer } from "./customer.model";
 import { Table } from "./table.model";
+import { database } from "../config/database.config";
+import { DataTypes } from "sequelize";
 
 export enum TableClaimStatus {
   ACTIVE = 'ACTIVE',

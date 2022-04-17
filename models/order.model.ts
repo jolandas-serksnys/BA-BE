@@ -1,8 +1,8 @@
+import { BaseModel } from "./base.model";
+import { Customer } from "./customer.model";
+import { TableClaim } from "./tableClaim.model";
+import { database } from "../config";
 import { DataTypes } from "sequelize";
-import { database } from "../../config";
-import { BaseModel } from "../base.model";
-import { Customer } from "../customer";
-import { TableClaim } from "../table";
 
 export interface OrderPriceRequestInterface {
   dishId: number;

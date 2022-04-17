@@ -1,2 +1,2 @@
-export * from './auth-jwt';
-export * from './employee-duplicate';
+export * from './auth-jwt.middleware';
+export * from './empoyee-duplicate.middleware';

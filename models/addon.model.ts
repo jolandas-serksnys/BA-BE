@@ -1,8 +1,8 @@
+import { BaseModel } from "./base.model";
+import { Dish } from "./dish.model";
+import { Option } from "./option.model";
+import { database } from "../config/database.config";
 import { DataTypes } from "sequelize";
-import { database } from "../../../config/database.config";
-import { BaseModel } from "../../base.model";
-import { Dish } from "../dish";
-import { Option } from "../option";
 
 export interface AddonInterface {
   title: string;
