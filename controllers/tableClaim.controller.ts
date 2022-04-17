@@ -1,6 +1,7 @@
 import app from "../app";
 import { config } from "../config";
 import {
+  AssistanceRequest,
   Customer,
   Table,
   TableClaim,
@@ -21,6 +22,9 @@ const MESSAGE_REQUEST_NEEDED = 'You have to request access to this table first';
 const MESSAGE_REQUEST_CODE_INCORRECT = 'The code you entered is incorrect';
 const MESSAGE_SEATS_LIMIT_ON = 'Seats limit has been enabled';
 const MESSAGE_SEATS_LIMIT_OFF = 'Seats limit has been disabled';
+const MESSAGE_ASSISTANCE_REQUESTED = 'Assistance request has been sent';
+const MESSAGE_ASSISTANCE_DISMISSED = 'Assistance request has been dismissed';
+const MESSAGE_ASSISTANCE_404 = 'Couldn\'t find requested assistance request';
 
 export class TableClaimController {
   public checkAvailability = async (req: Request, res: Response) => {
@@ -310,6 +314,100 @@ export class TableClaimController {
       });
     }
   }
+
+  public requestAssistance = async (req: Request, res: Response) => {
+    const { userId, type, message } = req.body;
+    const customer = await Customer.findByPk(userId);
+    const tableClaim = await TableClaim.findByPk(customer.tableClaimId);
+
+    if (!tableClaim || !customer) {
+      return res.status(404).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        message: MESSAGE_404
+      });
+    }
+
+    await AssistanceRequest.create({
+      type,
+      message,
+      tableClaimId: tableClaim.id
+    });
+
+    const claimClients = await this.getRelevantSocketClients(tableClaim.id);
+
+    claimClients.forEach((client) => {
+      app.io.to(client.id).emit('status', true);
+    });
+
+    res.status(200).json({
+      isSuccessful: true,
+      type: ResponseType.SUCCESS,
+      message: MESSAGE_ASSISTANCE_REQUESTED
+    });
+  };
+
+  public getAssistanceRequests = async (req: Request, res: Response) => {
+    const { establishmentId } = req.params;
+
+    const assistanceRequests = await AssistanceRequest.findAll({
+      where: {
+        isHidden: false
+      },
+      include: [
+        {
+          model: TableClaim,
+          as: 'tableClaim',
+          include: [
+            {
+              model: Table,
+              as: 'table',
+              where: {
+                establishmentId
+              }
+            }
+          ]
+        }
+      ],
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.status(200).json({
+      isSuccessful: true,
+      type: ResponseType.SUCCESS,
+      data: assistanceRequests
+    });
+  };
+
+  public dismissAssistanceRequest = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const assistanceRequest = await AssistanceRequest.findByPk(id);
+
+    if (!assistanceRequest) {
+      return res.status(404).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        message: MESSAGE_ASSISTANCE_404
+      });
+    }
+
+    await assistanceRequest.update({
+      isHidden: true
+    });
+
+    const claimClients = await this.getRelevantSocketClients(assistanceRequest.tableClaimId);
+
+    claimClients.forEach((client) => {
+      app.io.to(client.id).emit('status', true);
+    });
+
+    res.status(200).json({
+      isSuccessful: true,
+      type: ResponseType.SUCCESS,
+      message: MESSAGE_ASSISTANCE_DISMISSED
+    });
+  };
 
   public getRelevantSocketClients = async (tableClaimId) => {
     const sockets = await app.io.fetchSockets();

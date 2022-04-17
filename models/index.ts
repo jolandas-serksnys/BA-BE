@@ -1,4 +1,5 @@
 export * from './addon.model';
+export * from './assistanceRequest.model';
 export * from './base.model';
 export * from './category.model';
 export * from './customer.model';
@@ -8,6 +9,6 @@ export * from './establishment.model';
 export * from './option.model';
 export * from './order.model';
 export * from './sync';
-export * from './tableClaim.model';
 export * from './table.model';
+export * from './tableClaim.model';
 export * from './tag.model';

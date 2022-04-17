@@ -1,6 +1,7 @@
 import { TableClaimController } from "./tableClaim.controller";
 import app from "../app";
 import {
+  AssistanceRequest,
   Customer,
   CustomerOrder,
   CustomerOrderStatus,
@@ -17,6 +18,7 @@ import {
 import { ResponseType } from "../utils";
 import { Request, Response } from "express";
 import { Op } from "sequelize";
+import sequelize from "sequelize";
 
 const MESSAGE_404 = 'Table order not found.';
 const MESSAGE_200 = 'Order has been accepted.';

@@ -1,4 +1,5 @@
 import { Addon } from "./addon.model";
+import { AssistanceRequest } from "./assistanceRequest.model";
 import { Category } from "./category.model";
 import { Customer } from "./customer.model";
 import { Dish } from "./dish.model";
@@ -20,6 +21,7 @@ export const Sync = async () => {
     await Table.sync({ force: true }).then(() => console.log("Tables table created"));
     await TableClaim.sync({ force: true }).then(() => console.log("Table claims table created"));
     await Customer.sync({ force: true }).then(() => console.log("Customers table created"));
+    await AssistanceRequest.sync({ force: true }).then(() => console.log("Assistance requests table created"));
 
     await Category.sync({ force: true }).then(() => console.log("Categories table created"));
     await Dish.sync({ force: true }).then(() => console.log("Dishes table created"));

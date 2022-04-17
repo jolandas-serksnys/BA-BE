@@ -37,6 +37,8 @@ export class Routes {
       .get([verifyToken], this.tableClaimController.getClaimed);
     app.route(`${process.env.BASE_URL}/toggle-access-requests`)
       .post([verifyToken], this.tableClaimController.toggleAccessRequests);
+    app.route(`${process.env.BASE_URL}/assistance`)
+      .post([verifyToken], this.tableClaimController.requestAssistance);
 
     app.route(`${process.env.BASE_URL}/employee/sign-in`)
       .post(this.authController.employeeSignIn);
@@ -62,12 +64,10 @@ export class Routes {
       .delete([verifyToken, isAdmin], this.employeeController.deleteSignUpCode);
 
     app.route(`${process.env.BASE_URL}/establishment`)
-      .get([verifyToken, isAdmin], this.establishmentController.index)
-      .post([verifyToken, isAdmin], this.establishmentController.create);
+      .get([verifyToken, isAdmin], this.establishmentController.index);
     app.route(`${process.env.BASE_URL}/establishment/:id`)
       .get(this.establishmentController.get)
-      .put([verifyToken, isAdmin], this.establishmentController.update)
-      .delete([verifyToken, isAdmin], this.establishmentController.delete);
+      .put([verifyToken, isAdmin], this.establishmentController.update);
 
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table`)
       .get(this.tablesController.index)
@@ -124,5 +124,9 @@ export class Routes {
 
     app.route(`${process.env.BASE_URL}/claim/:id/toggle-seats-limit`)
       .post([verifyToken, isEmployee], this.tableClaimController.toggleSeatsLimitBypass);
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/assistance-requests`)
+      .get([verifyToken, isEmployee], this.tableClaimController.getAssistanceRequests);
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/assistance-requests/:id/dismiss`)
+      .post([verifyToken, isEmployee], this.tableClaimController.dismissAssistanceRequest);
   }
 }
