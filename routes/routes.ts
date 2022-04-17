@@ -1,17 +1,19 @@
 import {
+  AuthController,
   TableController,
   EmployeeController,
   EstablishmentController,
   CategoryController,
-  DishController
+  DishController,
+  OrderController,
+  TableClaimController
 } from "../controllers";
-import { AuthController } from "../controllers/authentication/authentication.controller";
 import { checkDuplicate, isAdmin, isEmployee, verifyToken } from "../middleware";
-import { OrderController } from "../controllers/order";
 
 export class Routes {
   public authController: AuthController = new AuthController();
   public tablesController: TableController = new TableController();
+  public tableClaimController: TableClaimController = new TableClaimController();
   public employeeController: EmployeeController = new EmployeeController();
   public establishmentController: EstablishmentController = new EstablishmentController();
   public categoryController: CategoryController = new CategoryController();
@@ -27,9 +29,9 @@ export class Routes {
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/sign-in`)
       .post(this.authController.customerSignIn);
     app.route(`${process.env.BASE_URL}/claimed`)
-      .get([verifyToken], this.tablesController.getClaimed);
+      .get([verifyToken], this.tableClaimController.getClaimed);
     app.route(`${process.env.BASE_URL}/toggle-access-requests`)
-      .post([verifyToken], this.tablesController.toggleAccessRequests);
+      .post([verifyToken], this.tableClaimController.toggleAccessRequests);
 
     app.route(`${process.env.BASE_URL}/employee/sign-in`)
       .post(this.authController.employeeSignIn);
@@ -66,7 +68,7 @@ export class Routes {
       .get(this.tablesController.index)
       .post([verifyToken, isAdmin], this.tablesController.create);
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table/:id/check-availability`)
-      .get(this.tablesController.checkAvailability);
+      .get(this.tableClaimController.checkAvailability);
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table/:id`)
       .get(this.tablesController.get)
       .put([verifyToken, isAdmin], this.tablesController.update)
@@ -116,6 +118,6 @@ export class Routes {
       .get([verifyToken], this.orderController.getCustomerReceipt);
 
     app.route(`${process.env.BASE_URL}/claim/:id/toggle-seats-limit`)
-      .post([verifyToken, isEmployee], this.tablesController.toggleSeatsLimitBypass);
+      .post([verifyToken, isEmployee], this.tableClaimController.toggleSeatsLimitBypass);
   }
 }

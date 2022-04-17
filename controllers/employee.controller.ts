@@ -1,7 +1,7 @@
+import { Employee, EmployeeType, SignUpCode } from "../models";
+import { ResponseType } from "../utils";
+import { generateCode } from "../utils/codeGenerator";
 import { Request, Response } from "express";
-import { Employee, EmployeeType, SignUpCode } from "../../models";
-import { ResponseType } from "../../utils";
-import { generateCode } from "../../utils/codeGenerator";
 
 const MESSAGE_202 = "Employee updated successfully";
 const MESSAGE_204 = "Employee deleted successfully";

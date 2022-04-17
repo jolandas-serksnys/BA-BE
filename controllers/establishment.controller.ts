@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { DestroyOptions, UpdateOptions } from "sequelize";
-import { Establishment, EstablishmentInterface } from "../../models";
-import { ResponseType } from "../../utils";
+import { Establishment, EstablishmentInterface } from "../models";
+import { ResponseType } from "../utils";
 
 const MESSAGE_CREATE = 'Establishment was successfully created';
 const MESSAGE_UPDATE = 'Establishment was successfully updated';

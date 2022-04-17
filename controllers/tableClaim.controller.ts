@@ -1,15 +1,16 @@
+import app from "../app";
+import { config } from "../config";
+import {
+  Customer,
+  Table,
+  TableClaim,
+  TableClaimStatus
+} from "../models";
+import { ResponseType } from "../utils";
+import { generateCode } from "../utils/codeGenerator";
 import { Request, Response } from "express";
-import { config } from "../../config";
-import { Table, TableInterface, TableClaim, Customer, Establishment, TableClaimStatus } from "../../models";
-import { ResponseType } from "../../utils";
-import { AuthController } from "../authentication";
-import * as jwt from 'jsonwebtoken';
-import app from "../../app";
-import { generateCode } from "../../utils/codeGenerator";
+import * as jwt from "jsonwebtoken";
 
-const MESSAGE_CREATE = 'Table was successfully created';
-const MESSAGE_UPDATE = 'Table was successfully updated';
-const MESSAGE_DELETE = 'Table was successfully deleted';
 const MESSAGE_CLAIMED = 'Successfully signed in';
 const MESSAGE_SEATS_TAKEN = 'All the seats are already taken at this table';
 const MESSAGE_404 = 'Couldn\'t find requested table';
@@ -21,203 +22,7 @@ const MESSAGE_REQUEST_CODE_INCORRECT = 'The code you entered is incorrect';
 const MESSAGE_SEATS_LIMIT_ON = 'Seats limit has been enabled';
 const MESSAGE_SEATS_LIMIT_OFF = 'Seats limit has been disabled';
 
-export class TableController {
-  public index = async (req: Request, res: Response) => {
-    const { establishmentId } = req.params;
-    const establishment = await Establishment.findByPk(establishmentId);
-
-    if (!establishment) {
-      return res.status(404).json({
-        isSuccessful: false,
-        type: ResponseType.DANGER,
-        message: MESSAGE_404
-      });
-    }
-
-    await Table.findAll<Table>({
-      where: {
-        establishmentId,
-      },
-    })
-      .then((nodes: Array<Table>) => res.json({
-        isSuccessful: true,
-        type: ResponseType.SUCCESS,
-        data: nodes
-      }))
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false,
-        type: ResponseType.DANGER,
-        message: error
-      }));
-  };
-
-  public create = async (req: Request, res: Response) => {
-    const { establishmentId } = req.params;
-    const establishment = await Establishment.findByPk(establishmentId);
-
-    if (!establishment) {
-      return res.status(404).json({
-        isSuccessful: false,
-        type: ResponseType.DANGER,
-        message: MESSAGE_404
-      });
-    }
-
-    const params: TableInterface = req.body;
-
-    await Table.create<Table>({
-      ...params,
-      establishmentId
-    })
-      .then(async (node: Table) => {
-        if (params.useId) {
-          await node.update({ number: parseInt(node.getDataValue('id'), 10) + 1000 });
-        }
-
-        res.status(201).json({
-          isSuccessful: true,
-          type: ResponseType.SUCCESS,
-          data: node,
-          message: MESSAGE_CREATE
-        })
-      })
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false,
-        type: ResponseType.DANGER,
-        message: error
-      }));
-  }
-
-  public get = async (req: Request, res: Response) => {
-    const { establishmentId, id } = req.params;
-
-    await Table.findOne<Table>({
-      where: {
-        id,
-        establishmentId
-      }
-    })
-      .then((node: Table | null) => {
-        if (node) {
-          res.json({
-            isSuccessful: true,
-            type: ResponseType.SUCCESS,
-            data: node
-          });
-        } else {
-          res.status(404).json({
-            isSuccessful: false,
-            type: ResponseType.DANGER,
-            message: MESSAGE_404
-          });
-        }
-      })
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false,
-        type: ResponseType.DANGER,
-        message: error
-      }));
-  };
-
-  public update = async (req: Request, res: Response) => {
-    const { establishmentId, id } = req.params;
-    const params: TableInterface = req.body;
-
-    const node = await Table.findOne({
-      where: {
-        id,
-        establishmentId
-      }
-    });
-
-    if (!node) {
-      return res.status(404).json({
-        isSuccessful: false,
-        type: ResponseType.DANGER,
-        message: MESSAGE_404
-      });
-    }
-
-    await node.update(params)
-      .then(() => {
-        res.status(202).json({
-          isSuccessful: true,
-          type: ResponseType.SUCCESS,
-          data: node,
-          message: MESSAGE_UPDATE
-        })
-      })
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false,
-        type: ResponseType.DANGER,
-        message: error
-      }));
-  };
-
-  public delete = async (req: Request, res: Response) => {
-    const { establishmentId, id } = req.params;
-
-    await Table.findOne({
-      where: {
-        id,
-        establishmentId
-      }
-    }).then(async (node: Table | null) => {
-      if (!node) {
-        return res.status(404).json({
-          isSuccessful: false,
-          type: ResponseType.DANGER,
-          message: MESSAGE_404
-        });
-      }
-
-      await node.destroy({})
-        .then(() => res.status(200).json({
-          isSuccessful: true,
-          type: ResponseType.SUCCESS,
-          data: node, message: MESSAGE_DELETE
-        }))
-        .catch((error: Error) => res.status(500).json({
-          isSuccessful: false,
-          type: ResponseType.DANGER,
-          message: error
-        }));
-    });
-  };
-
-  public toggleAvailability = async (req: Request, res: Response) => {
-    const { establishmentId, id } = req.params;
-
-    await Table.findOne({
-      where: {
-        id,
-        establishmentId
-      }
-    })
-      .then(async (node) => {
-        if (node) {
-          await node.update({ isAvailable: !node.isAvailable });
-          res.status(200).json({
-            isSuccessful: true,
-            type: ResponseType.SUCCESS,
-            data: node,
-            message: MESSAGE_UPDATE
-          });
-        } else {
-          res.status(404).json({
-            isSuccessful: false,
-            type: ResponseType.DANGER,
-            message: MESSAGE_404
-          });
-        }
-      })
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false,
-        type: ResponseType.DANGER,
-        message: error
-      }));
-  };
-
+export class TableClaimController {
   public checkAvailability = async (req: Request, res: Response) => {
     const { establishmentId, id } = req.params;
 
@@ -472,21 +277,6 @@ export class TableController {
       }));
   };
 
-  public getRelevantSocketClients = async (tableClaimId) => {
-    const sockets = await app.io.fetchSockets();
-
-    const relevantSockets = sockets.map((s) => ({
-      claimId: s.handshake.query.tableClaim,
-      isEmployee: s.handshake.query.isEmployee,
-      id: s.id
-    })).filter((c) =>
-      Number(c.claimId) === Number(tableClaimId)
-      || c.isEmployee === 'true'
-    );
-
-    return relevantSockets;
-  };
-
   public toggleSeatsLimitBypass = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
@@ -496,7 +286,7 @@ export class TableController {
         allowSeatsBypass: !tableClaim.allowSeatsBypass
       });
 
-      const claimClients = await new TableController().getRelevantSocketClients(tableClaim.id);
+      const claimClients = await this.getRelevantSocketClients(tableClaim.id);
 
       claimClients.forEach((client) => {
         app.io.to(client.id).emit('status', true);
@@ -520,4 +310,19 @@ export class TableController {
       });
     }
   }
+
+  public getRelevantSocketClients = async (tableClaimId) => {
+    const sockets = await app.io.fetchSockets();
+
+    const relevantSockets = sockets.map((s) => ({
+      claimId: s.handshake.query.tableClaim,
+      isEmployee: s.handshake.query.isEmployee,
+      id: s.id
+    })).filter((c) =>
+      Number(c.claimId) === Number(tableClaimId)
+      || c.isEmployee === 'true'
+    );
+
+    return relevantSockets;
+  };
 };

@@ -1,10 +1,17 @@
+import { TableClaimController } from "./tableClaim.controller";
+import { config } from "../config";
+import {
+  Customer,
+  Employee,
+  EmployeeRole,
+  Establishment,
+  SignUpCode,
+  Table
+} from "../models";
+import { ResponseType } from "../utils";
+import * as bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import { Customer, Employee, EmployeeRole, Establishment, SignUpCode, Table } from "../../models";
-import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
-import { config } from "../../config";
-import { TableController } from "..";
-import { ResponseType } from "../../utils";
+import * as jwt from "jsonwebtoken";
 
 const MESSAGE_SIGNED_IN = 'Successfully signed in';
 const MESSAGE_SIGNED_UP = 'Successfully signed up';
@@ -111,22 +118,21 @@ export class AuthController {
     }
   };
 
-  public customerSignIn = (req: Request, res: Response) => {
+  public customerSignIn = async (req: Request, res: Response) => {
     const { tableId } = req.body;
 
-    Table.findByPk(tableId)
-      .then((table) => {
-        if (table) {
-          const tableController = new TableController();
-          return tableController.claim(table, req, res);
-        }
-        else {
-          res.status(404).json({ isSuccessful: false, type: ResponseType.DANGER, message: MESSAGE_404 });
-        }
-      })
-      .catch((error) => {
-        res.status(500).send({ isSuccessful: false, type: ResponseType.DANGER, message: error.message });
+    const table = await Table.findByPk(tableId);
+
+    if (table) {
+      const tableClaimController = new TableClaimController();
+      return await tableClaimController.claim(table, req, res);
+    } else {
+      res.status(404).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        message: MESSAGE_404
       });
+    }
   };
 
   public employeeSignIn = async (req: Request, res: Response) => {

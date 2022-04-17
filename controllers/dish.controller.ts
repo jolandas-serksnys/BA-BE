@@ -1,10 +1,10 @@
+import { Dish, DishInterface } from "../models";
+import { Addon } from "../models/menu/addon";
+import { Option } from "../models/menu/option";
+import { Tag } from "../models/menu/tag";
+import { ResponseType } from "../utils";
 import { Request, Response } from "express";
 import { DestroyOptions, UpdateOptions } from "sequelize";
-import { Dish, DishInterface } from "../../models";
-import { Addon } from "../../models/menu/addon";
-import { Option } from "../../models/menu/option";
-import { Tag } from "../../models/menu/tag";
-import { ResponseType } from "../../utils";
 
 const MESSAGE_CREATE = 'Dish was successfully created';
 const MESSAGE_UPDATE = 'Dish was successfully updated';

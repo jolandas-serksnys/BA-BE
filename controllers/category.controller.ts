@@ -1,10 +1,11 @@
+import {
+  Category,
+  CategoryInterface,
+  Employee
+} from "../models";
+import { ResponseType } from "../utils";
 import { Request, Response } from "express";
 import { DestroyOptions, UpdateOptions } from "sequelize";
-import { database } from "../../config";
-import { Category, CategoryInterface, Dish, Employee } from "../../models";
-import { Tag } from "../../models/menu/tag";
-import { ResponseType } from "../../utils";
-import { AuthController } from "../authentication";
 
 const MESSAGE_CREATE = 'Category was successfully created';
 const MESSAGE_UPDATE = 'Category was successfully updated';

@@ -1,11 +1,23 @@
+import { TableClaimController } from "./tableClaim.controller";
+import app from "../app";
+import {
+  Customer,
+  Table,
+  TableClaim,
+  TableClaimStatus
+} from "../models";
+import { Dish } from "../models/menu/dish/dish.model";
+import { Option } from "../models/menu/option/option.model";
+import {
+  CustomerOrder,
+  CustomerOrderStatus,
+  OrderAddon,
+  OrderPriceRequestInterface,
+  TableOrder,
+  TableOrderStatus
+} from "../models/order";
+import { ResponseType } from "../utils";
 import { Request, Response } from "express";
-import { Dish } from "../../models/menu/dish/dish.model";
-import { Option } from "../../models/menu/option/option.model";
-import { CustomerOrder, CustomerOrderStatus, OrderAddon, OrderPriceRequestInterface, TableOrder, TableOrderStatus } from "../../models/order";
-import { ResponseType } from "../../utils";
-import app from "../../app";
-import { Customer, Table, TableClaim, TableClaimStatus } from "../../models";
-import { TableController } from "../table";
 import { Op } from "sequelize";
 
 const MESSAGE_404 = 'Table order not found.';
@@ -45,7 +57,7 @@ export class OrderController {
   public processOrder = async (req: Request, res: Response) => {
     try {
       const { tableClaimId, dishId, options, comment, quantity, userId } = req.body;
-      const claimClients = await new TableController().getRelevantSocketClients(tableClaimId);
+      const claimClients = await new TableClaimController().getRelevantSocketClients(tableClaimId);
 
       let tableOrder;
 
@@ -196,7 +208,7 @@ export class OrderController {
         });
 
         const tableOrder = await TableOrder.findByPk(customerOrder.tableOrderId);
-        const claimClients = await new TableController().getRelevantSocketClients(tableOrder.tableClaimId);
+        const claimClients = await new TableClaimController().getRelevantSocketClients(tableOrder.tableClaimId);
 
         res.status(200).json({
           isSuccessful: true,
@@ -249,7 +261,7 @@ export class OrderController {
       const tableOrder = await TableOrder.findByPk(customerOrder.tableOrderId);
 
       if (customerOrder) {
-        const claimClients = await new TableController().getRelevantSocketClients(tableOrder.tableClaimId);
+        const claimClients = await new TableClaimController().getRelevantSocketClients(tableOrder.tableClaimId);
 
         await customerOrder.update({
           status: status
@@ -360,7 +372,7 @@ export class OrderController {
             TableClaimStatus.CLOSED : TableClaimStatus.ACTIVE)
         });
 
-        const claimClients = await new TableController().getRelevantSocketClients(tableClaim.id);
+        const claimClients = await new TableClaimController().getRelevantSocketClients(tableClaim.id);
 
         claimClients.forEach((client) => {
           app.io.to(client.id).emit('status', true);
