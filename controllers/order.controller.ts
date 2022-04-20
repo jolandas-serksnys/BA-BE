@@ -406,7 +406,10 @@ export class OrderController {
 
       const customerOrders = await CustomerOrder.findAll({
         where: {
-          ownerId: userId
+          ownerId: userId,
+          status: {
+            [Op.ne]: CustomerOrderStatus.CANCELLED
+          }
         },
         include: [
           {
@@ -452,6 +455,9 @@ export class OrderController {
           tableOrderId: tableOrder.id,
           ownerId: {
             [Op.ne]: userId
+          },
+          status: {
+            [Op.ne]: CustomerOrderStatus.CANCELLED
           }
         },
         include: [
@@ -477,6 +483,57 @@ export class OrderController {
         data: {
           orders: customerOrders,
           totalPrice
+        }
+      });
+    } catch (error) {
+      res.status(400).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        data: error
+      });
+    }
+  }
+
+  public getTableReceiptTotal = async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.body;
+      const customer = await Customer.findByPk(userId);
+      const tableOrder = await TableOrder.findOne({
+        where: {
+          tableClaimId: customer.tableClaimId
+        },
+        attributes: ['id'],
+      });
+
+      const customerOrders = await CustomerOrder.findAll({
+        where: {
+          tableOrderId: tableOrder.id,
+          status: {
+            [Op.ne]: CustomerOrderStatus.CANCELLED
+          }
+        },
+        include: [
+          {
+            model: OrderAddon,
+            as: 'order_addons',
+            attributes: ['title', 'price']
+          },
+          {
+            model: Customer,
+            as: 'owner',
+            attributes: ['displayName', 'id']
+          }
+        ],
+        order: [['ownerId', 'DESC']]
+      });
+
+      const total = customerOrders.reduce((acc, order) => Number(acc) + Number(order.totalPrice), 0);
+
+      res.status(200).json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: {
+          total
         }
       });
     } catch (error) {

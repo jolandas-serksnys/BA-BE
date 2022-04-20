@@ -121,6 +121,8 @@ export class Routes {
       .get([verifyToken], this.orderController.getOrderReceipts);
     app.route(`${process.env.BASE_URL}/order/receipt/user`)
       .get([verifyToken], this.orderController.getCustomerReceipt);
+    app.route(`${process.env.BASE_URL}/order/receipt/total`)
+      .get([verifyToken], this.orderController.getTableReceiptTotal);
 
     app.route(`${process.env.BASE_URL}/claim/:id/toggle-seats-limit`)
       .post([verifyToken, isEmployee], this.tableClaimController.toggleSeatsLimitBypass);
