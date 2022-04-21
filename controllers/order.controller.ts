@@ -198,7 +198,8 @@ export class OrderController {
       const customerOrder = await CustomerOrder.findOne({
         where: {
           id: id,
-          ownerId: userId
+          ownerId: userId,
+          status: CustomerOrderStatus.CREATED
         }
       });
 

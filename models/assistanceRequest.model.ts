@@ -43,7 +43,7 @@ AssistanceRequest.init(
     },
     message: {
       type: new DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
