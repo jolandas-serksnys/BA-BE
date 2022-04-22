@@ -26,7 +26,7 @@ const ERROR_PASSWORD_MISMATCH = 'Passwords don\'t match';
 const MESSAGE_PASSWORD_UPDATED = 'Password has been successfully updated';
 
 export class AuthController {
-  public getUser = async (req: Request) => {
+  public getUserFromRequest = async (req: Request) => {
     const error = {
       isEmployee: null,
       userId: null
@@ -52,7 +52,7 @@ export class AuthController {
     const userId = tokenBody['id'] as number;
 
     return { isEmployee, userId };
-  }
+  };
 
   public getUserByToken = async (token: string) => {
     const error = {
@@ -74,10 +74,10 @@ export class AuthController {
     const userId = tokenBody['id'] as number;
 
     return { isEmployee, userId };
-  }
+  };
 
-  public user = async (req: Request, res: Response) => {
-    const { isEmployee, userId } = await this.getUser(req);
+  public getUser = async (req: Request, res: Response) => {
+    const { isEmployee, userId } = await this.getUserFromRequest(req);
 
     if (!userId) {
       return res.status(401).send({
@@ -281,7 +281,7 @@ export class AuthController {
   public employeeUpdateAccount = async (req: Request, res: Response) => {
     const { firstName, lastName } = req.body;
 
-    const employee = await this.getUser(req);
+    const employee = await this.getUserFromRequest(req);
 
     if (!employee) {
       return res.status(401).send({
@@ -314,7 +314,7 @@ export class AuthController {
   public employeeUpdatePassword = async (req: Request, res: Response) => {
     const { currentPassword, password, passwordConfirmation } = req.body;
 
-    const user = await this.getUser(req);
+    const user = await this.getUserFromRequest(req);
 
     if (!user) {
       return res.status(401).send({

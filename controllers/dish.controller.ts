@@ -36,7 +36,7 @@ export class DishController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public indexEmployee = async (req: Request, res: Response) => {
     const { categoryId } = req.params;
@@ -58,7 +58,7 @@ export class DishController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public create = async (req: Request, res: Response) => {
     const { categoryId } = req.params;
@@ -80,7 +80,7 @@ export class DishController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public get = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -119,7 +119,7 @@ export class DishController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public update = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -143,7 +143,7 @@ export class DishController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public delete = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -171,7 +171,7 @@ export class DishController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public toggleAvailability = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -192,7 +192,7 @@ export class DishController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public toggleVisibility = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -213,5 +213,5 @@ export class DishController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 }

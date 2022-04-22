@@ -27,7 +27,7 @@ export class CategoryController {
       type: ResponseType.SUCCESS,
       data: categories
     })
-  }
+  };
 
   public create = async (req: Request, res: Response) => {
     const params: CategoryInterface = req.body;
@@ -44,7 +44,7 @@ export class CategoryController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public get = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -64,7 +64,7 @@ export class CategoryController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public update = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -88,7 +88,7 @@ export class CategoryController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public delete = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -116,5 +116,5 @@ export class CategoryController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 }

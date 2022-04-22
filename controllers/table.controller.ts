@@ -72,7 +72,7 @@ export class TableController {
         type: ResponseType.DANGER,
         message: error
       }));
-  }
+  };
 
   public get = async (req: Request, res: Response) => {
     const { establishmentId, id } = req.params;

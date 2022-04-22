@@ -1,8 +1,9 @@
 import { BaseModel } from "./base.model";
 import { database } from "../config/database.config";
 import { DataTypes } from "sequelize";
+import { UserInterface } from "./user.model";
 
-export interface CustomerInterface {
+export interface CustomerInterface extends UserInterface {
   displayName: string;
   tableClaimId: number;
 }

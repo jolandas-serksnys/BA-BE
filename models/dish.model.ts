@@ -6,7 +6,7 @@ import { DataTypes } from "sequelize";
 export interface DishInterface {
   title: string;
   description: string;
-  ageRestriction: string;
+  warningLabel: string;
   isVisible: boolean;
   isAvailable: boolean;
   imageUrl: string;
@@ -17,7 +17,7 @@ export interface DishInterface {
 export class Dish extends BaseModel {
   declare title: string;
   declare description: string;
-  declare ageRestriction: string;
+  declare warningLabel: string;
   declare isVisible: boolean;
   declare isAvailable: boolean;
   declare imageUrl: string;
@@ -28,15 +28,15 @@ export class Dish extends BaseModel {
 Dish.init(
   {
     title: {
-      type: new DataTypes.STRING(128),
+      type: new DataTypes.STRING(256),
       allowNull: false,
     },
     description: {
       type: new DataTypes.TEXT,
       allowNull: true,
     },
-    ageRestriction: {
-      type: new DataTypes.TEXT,
+    warningLabel: {
+      type: new DataTypes.STRING(256),
       allowNull: true,
     },
     isVisible: {

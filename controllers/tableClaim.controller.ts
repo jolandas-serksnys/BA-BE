@@ -313,7 +313,7 @@ export class TableClaimController {
         data: error
       });
     }
-  }
+  };
 
   public requestAssistance = async (req: Request, res: Response) => {
     const { userId, type, message } = req.body;

@@ -1,4 +1,4 @@
-import { Employee, EmployeeType, SignUpCode } from "../models";
+import { Employee, EmployeeInterface, SignUpCode } from "../models";
 import { ResponseType } from "../utils";
 import { generateCode } from "../utils/codeGenerator";
 import { Request, Response } from "express";
@@ -23,7 +23,7 @@ export class EmployeeController {
       type: ResponseType.SUCCESS,
       data: nodes
     })
-  }
+  };
 
   public get = async (req: Request, res: Response) => {
     const { establishmentId, id } = req.params;
@@ -56,11 +56,11 @@ export class EmployeeController {
         type: ResponseType.DANGER,
         message: err.message
       }));
-  }
+  };
 
   public update = async (req: Request, res: Response) => {
     const { establishmentId, id } = req.params;
-    const params: EmployeeType = req.body;
+    const params: EmployeeInterface = req.body;
 
     await Employee.update(params, {
       where: {
@@ -79,7 +79,7 @@ export class EmployeeController {
         type: ResponseType.DANGER,
         message: err.message
       }));
-  }
+  };
 
   public delete = async (req: Request, res: Response) => {
     const { establishmentId, id } = req.params;
@@ -101,7 +101,7 @@ export class EmployeeController {
         type: ResponseType.DANGER,
         message: err.message
       }));
-  }
+  };
 
   public indexSignUpCodes = async (req: Request, res: Response) => {
     const { establishmentId } = req.params;
@@ -118,7 +118,7 @@ export class EmployeeController {
       type: ResponseType.SUCCESS,
       data: nodes
     });
-  }
+  };
 
   public createSignUpCode = async (req: Request, res: Response) => {
     const { establishmentId } = req.params;
@@ -137,7 +137,7 @@ export class EmployeeController {
       type: ResponseType.SUCCESS,
       data: newCode
     });
-  }
+  };
 
   public deleteSignUpCode = async (req: Request, res: Response) => {
     const { establishmentId, id } = req.params;
@@ -159,6 +159,5 @@ export class EmployeeController {
         type: ResponseType.DANGER,
         message: err.message
       }));
-  }
-
+  };
 }

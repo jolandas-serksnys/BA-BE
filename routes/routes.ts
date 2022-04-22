@@ -30,7 +30,7 @@ export class Routes {
       .get(this.tablesController.index);
 
     app.route(`${process.env.BASE_URL}/user`)
-      .get(this.authController.user);
+      .get(this.authController.getUser);
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/sign-in`)
       .post(this.authController.customerSignIn);
     app.route(`${process.env.BASE_URL}/claimed`)
@@ -63,8 +63,6 @@ export class Routes {
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/sign-up-code/:id`)
       .delete([verifyToken, isAdmin], this.employeeController.deleteSignUpCode);
 
-    app.route(`${process.env.BASE_URL}/establishment`)
-      .get([verifyToken, isAdmin], this.establishmentController.index);
     app.route(`${process.env.BASE_URL}/establishment/:id`)
       .get(this.establishmentController.get)
       .put([verifyToken, isAdmin], this.establishmentController.update);
@@ -112,17 +110,17 @@ export class Routes {
     app.route(`${process.env.BASE_URL}/order/table/:id/toggle`)
       .post([verifyToken, isEmployee], this.orderController.toggleTableOrderClaim);
     app.route(`${process.env.BASE_URL}/order/:id/cancel`)
-      .post(verifyToken, this.orderController.cancel);
+      .post(verifyToken, this.orderController.cancelCustomerOrder);
     app.route(`${process.env.BASE_URL}/order/active`)
       .post([verifyToken, isEmployee], this.orderController.getActiveOrders);
     app.route(`${process.env.BASE_URL}/order/:id/status`)
       .post([verifyToken, isEmployee], this.orderController.updateStatus);
     app.route(`${process.env.BASE_URL}/order/receipts`)
-      .get([verifyToken], this.orderController.getOrderReceipts);
+      .get([verifyToken], this.orderController.getTableBill);
     app.route(`${process.env.BASE_URL}/order/receipt/user`)
-      .get([verifyToken], this.orderController.getCustomerReceipt);
+      .get([verifyToken], this.orderController.getCustomerBill);
     app.route(`${process.env.BASE_URL}/order/receipt/total`)
-      .get([verifyToken], this.orderController.getTableReceiptTotal);
+      .get([verifyToken], this.orderController.getTableBillTotal);
 
     app.route(`${process.env.BASE_URL}/claim/:id/toggle-seats-limit`)
       .post([verifyToken, isEmployee], this.tableClaimController.toggleSeatsLimitBypass);

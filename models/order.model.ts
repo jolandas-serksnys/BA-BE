@@ -34,9 +34,15 @@ export enum CustomerOrderStatus {
 }
 
 export interface CustomerOrderInterface {
+  title: string;
   status: CustomerOrderStatus;
   comment: string;
-  price: string;
+  price: number;
+  totalPrice: number;
+  dishId: number;
+  tableOrderId: number;
+  ownerId: number;
+  quantity: number;
 }
 
 export class CustomerOrder extends BaseModel {

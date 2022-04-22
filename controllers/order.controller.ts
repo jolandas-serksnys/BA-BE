@@ -1,7 +1,6 @@
 import { TableClaimController } from "./tableClaim.controller";
 import app from "../app";
 import {
-  AssistanceRequest,
   Customer,
   CustomerOrder,
   CustomerOrderStatus,
@@ -18,7 +17,6 @@ import {
 import { ResponseType } from "../utils";
 import { Request, Response } from "express";
 import { Op } from "sequelize";
-import sequelize from "sequelize";
 
 const MESSAGE_404 = 'Table order not found.';
 const MESSAGE_200 = 'Order has been accepted.';
@@ -52,7 +50,7 @@ export class OrderController {
         data: error
       });
     }
-  }
+  };
 
   public processOrder = async (req: Request, res: Response) => {
     try {
@@ -143,7 +141,7 @@ export class OrderController {
         data: error
       });
     }
-  }
+  };
 
   public getTableOrder = async (req: Request, res: Response) => {
     try {
@@ -190,9 +188,9 @@ export class OrderController {
         data: error
       });
     }
-  }
+  };
 
-  public cancel = async (req: Request, res: Response) => {
+  public cancelCustomerOrder = async (req: Request, res: Response) => {
     try {
       const { id, userId } = req.body;
       const customerOrder = await CustomerOrder.findOne({
@@ -401,7 +399,7 @@ export class OrderController {
     }
   };
 
-  public getCustomerReceipt = async (req: Request, res: Response) => {
+  public getCustomerBill = async (req: Request, res: Response) => {
     try {
       const { userId } = req.body;
 
@@ -438,9 +436,9 @@ export class OrderController {
         data: error
       });
     }
-  }
+  };
 
-  public getOrderReceipts = async (req: Request, res: Response) => {
+  public getTableBill = async (req: Request, res: Response) => {
     try {
       const { userId } = req.body;
       const customer = await Customer.findByPk(userId);
@@ -493,9 +491,9 @@ export class OrderController {
         data: error
       });
     }
-  }
+  };
 
-  public getTableReceiptTotal = async (req: Request, res: Response) => {
+  public getTableBillTotal = async (req: Request, res: Response) => {
     try {
       const { userId } = req.body;
       const customer = await Customer.findByPk(userId);
@@ -544,5 +542,5 @@ export class OrderController {
         data: error
       });
     }
-  }
+  };
 }

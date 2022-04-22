@@ -1,24 +1,12 @@
 import { Request, Response } from "express";
-import { DestroyOptions, UpdateOptions } from "sequelize";
+import { UpdateOptions } from "sequelize";
 import { Establishment, EstablishmentInterface } from "../models";
 import { ResponseType } from "../utils";
 
-const MESSAGE_CREATE = 'Establishment was successfully created';
 const MESSAGE_UPDATE = 'Establishment was successfully updated';
-const MESSAGE_DELETE = 'Establishment was successfully deleted';
 const MESSAGE_404 = 'Couldn\'t find requested establishment';
 
 export class EstablishmentController {
-  public index(req: Request, res: Response) {
-    Establishment.findAll<Establishment>({})
-      .then((nodes: Array<Establishment>) => res.json({
-        isSuccessful: true, type: ResponseType.SUCCESS, data: nodes
-      }))
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false, type: ResponseType.DANGER, message: error
-      }));
-  }
-
   public get(req: Request, res: Response) {
     const id: number = parseInt(req.params.id);
 
@@ -37,7 +25,7 @@ export class EstablishmentController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 
   public update(req: Request, res: Response) {
     const id: number = parseInt(req.params.id);
@@ -61,5 +49,5 @@ export class EstablishmentController {
       .catch((error: Error) => res.status(500).json({
         isSuccessful: false, type: ResponseType.DANGER, message: error
       }));
-  }
+  };
 }

@@ -2,6 +2,7 @@ import { BaseModel } from "./base.model";
 import { Establishment } from "./establishment.model";
 import { database } from "../config/database.config";
 import { DataTypes } from "sequelize";
+import { UserInterface } from "./user.model";
 
 export enum EmployeeRole {
   GENERAL = 'GENERAL',
@@ -12,7 +13,7 @@ export enum EmployeeRole {
   OTHER = 'OTHER'
 }
 
-export type EmployeeType = {
+export interface EmployeeInterface extends UserInterface {
   firstName: string;
   lastName: string;
   email: string;
@@ -62,7 +63,7 @@ Employee.init(
   }
 );
 
-export type SignUpCodeType = {
+export interface SignUpCodeInterface {
   code: string;
   establishmentId: number;
   role: EmployeeRole;
