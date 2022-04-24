@@ -4,7 +4,7 @@ import { Category } from "./category.model";
 import { Customer } from "./customer.model";
 import { Dish } from "./dish.model";
 import { Employee, SignUpCode } from "./employee.model";
-import { Establishment, EstablishmentType } from "./establishment.model";
+import { Establishment } from "./establishment.model";
 import { Option } from "./option.model";
 import { CustomerOrder, OrderAddon, TableOrder } from "./order.model";
 import { Table } from "./table.model";
