@@ -100,6 +100,12 @@ export class Routes {
       .post([verifyToken, isAdmin], this.dishController.toggleAvailability);
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/:id/toggle-visibility`)
       .post([verifyToken, isAdmin], this.dishController.toggleVisibility);
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/:id/addons`)
+      .get([verifyToken, isAdmin], this.dishController.indexAddons)
+      .post([verifyToken, isAdmin], this.dishController.createAddon);
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/:dishId/addons/:id`)
+      .put([verifyToken, isAdmin], this.dishController.updateAddon)
+      .delete([verifyToken, isAdmin], this.dishController.deleteAddon);
 
     app.route(`${process.env.BASE_URL}/order`)
       .post(verifyToken, this.orderController.processOrder);
