@@ -3,6 +3,7 @@ import {
   Dish,
   DishInterface,
   Option,
+  OptionInterface,
   Tag
 } from "../models";
 import { ResponseType } from "../utils";
@@ -408,7 +409,7 @@ export class DishController {
                 if (options) {
                   await Promise.all(options.map(async (option: Option) => {
                     await Option.create({
-                      name: option.title,
+                      title: option.title,
                       price: option.price,
                       addonId: node.id,
                     });
@@ -467,29 +468,33 @@ export class DishController {
                   })
                     .then(async () => {
                       if (options) {
-                        await Promise.all(options.map(async (option: Option) => {
-                          await Option.findOne({
-                            where: {
-                              id: option.id,
-                              addonId: addon.id
-                            }
-                          })
-                            .then(async (node: Option) => {
-                              if (node) {
-                                await node.update({
-
-                                  name: option.title,
-                                  price: option.price,
-                                });
-                              } else {
-                                await Option.create({
-                                  name: option.title,
-                                  price: option.price,
-                                  addonId: addon.id,
-                                });
-
+                        await Promise.all(options.map(async (option: OptionInterface) => {
+                          if (option.id) {
+                            await Option.findOne({
+                              where: {
+                                id: option.id,
+                                addonId: addon.id
                               }
+                            })
+                              .then(async (node: Option) => {
+                                if (node) {
+                                  if (option.isDeleted) {
+                                    await node.destroy();
+                                  } else {
+                                    await node.update({
+                                      name: option.title,
+                                      price: option.price,
+                                    });
+                                  }
+                                }
+                              });
+                          } else {
+                            await Option.create({
+                              title: option.title,
+                              price: option.price,
+                              addonId: addon.id,
                             });
+                          }
                         }));
                       }
                       res.status(200).json({
