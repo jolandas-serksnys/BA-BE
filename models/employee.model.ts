@@ -5,12 +5,11 @@ import { DataTypes } from "sequelize";
 import { UserInterface } from "./user.model";
 
 export enum EmployeeRole {
-  GENERAL = 'GENERAL',
-  WAITER = 'WAITER',
-  ADMINISTRATOR = 'ADMINISTRATOR',
-  RECEPTIONIST = 'RECEPTIONIST',
-  KITCHEN = 'KITCHEN',
-  OTHER = 'OTHER'
+  GENERAL = 'general',
+  WAITER = 'waiter',
+  ADMINISTRATOR = 'administrator',
+  KITCHEN = 'kitchenStaff',
+  OTHER = 'other'
 }
 
 export interface EmployeeInterface extends UserInterface {
@@ -44,12 +43,11 @@ Employee.init(
     },
     role: {
       type: DataTypes.ENUM(
-        'GENERAL',
-        'WAITER',
-        'ADMINISTRATOR',
-        'RECEPTIONIST',
-        'KITCHEN',
-        'OTHER'
+        'general',
+        'waiter',
+        'administrator',
+        'kitchenStaff',
+        'other'
       ),
       allowNull: false,
     },
@@ -89,12 +87,11 @@ SignUpCode.init(
     },
     role: {
       type: DataTypes.ENUM(
-        'GENERAL',
-        'WAITER',
-        'ADMINISTRATOR',
-        'RECEPTIONIST',
-        'KITCHEN',
-        'OTHER'
+        'general',
+        'waiter',
+        'administrator',
+        'kitchenStaff',
+        'other'
       ),
       allowNull: false,
     },
