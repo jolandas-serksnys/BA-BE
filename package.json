@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "test": "yarn jest",
+    "test": "yarn jest --forceExit --detectOpenHandles --watchAll --maxWorkers=1",
     "start": "node --loader ts-node/esm server.ts",
     "dev": "nodemon server.ts"
   },

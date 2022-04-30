@@ -24,7 +24,9 @@ class App {
     this.configApp();
 
     this.server = createServer(this.app);
-    this.server.listen(process.env.PORT || 8080, () => console.log(`App listening on port ${process.env.PORT || 8080}!`));
+    if (process.env.NODE_ENV !== 'test') {
+      this.server.listen(process.env.port || 8080, () => console.log(`App listening on port ${process.env.port || 8080}!`));
+    }
     this.io = new Server(this.server, { cors: options });
 
     this.routePrv.routes(this.app);
@@ -34,6 +36,10 @@ class App {
     this.app.use(cors(options));
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(bodyParser.json());
+  }
+
+  public close(): void {
+    this.server.close();
   }
 }
 

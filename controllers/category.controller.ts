@@ -30,64 +30,108 @@ export class CategoryController {
   };
 
   public create = async (req: Request, res: Response) => {
-    const params: CategoryInterface = req.body;
+    try {
+      const { title, description, isVisible } = req.body;
+      const { establishmentId } = req.params;
 
-    const { userId } = req.body;
-    const user = await Employee.findByPk(userId);
-
-    params.establishmentId = user.getDataValue('establishmentId');
-
-    await Category.create<Category>({ ...params })
-      .then((node: Category) => res.status(201).json({
-        isSuccessful: true, type: ResponseType.SUCCESS, data: node, message: MESSAGE_CREATE
-      }))
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false, type: ResponseType.DANGER, message: error
-      }));
+      await Category.create<Category>({ title, description, isVisible, establishmentId })
+        .then((node: Category) => res.status(201).json({
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          data: node,
+          message: MESSAGE_CREATE
+        }))
+        .catch((error: Error) => res.status(500).json({
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: error
+        }));
+    } catch (error) {
+      res.status(500).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        message: error
+      });
+    }
   };
 
   public get = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    try {
+      const { id, establishmentId } = req.params;
 
-    await Category.findByPk<Category>(id)
-      .then((node: Category | null) => {
-        if (node) {
-          res.json({
-            isSuccessful: true, type: ResponseType.SUCCESS, data: node
-          });
-        } else {
-          res.status(404).json({
-            isSuccessful: false, type: ResponseType.DANGER, message: MESSAGE_404
-          });
+      await Category.findOne<Category>({
+        where: {
+          id,
+          establishmentId
         }
       })
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false, type: ResponseType.DANGER, message: error
-      }));
+        .then((node: Category | null) => {
+          if (node) {
+            res.json({
+              isSuccessful: true,
+              type: ResponseType.SUCCESS,
+              data: node
+            });
+          } else {
+            res.status(404).json({
+              isSuccessful: false,
+              type: ResponseType.DANGER,
+              message: MESSAGE_404
+            });
+          }
+        })
+        .catch((error: Error) => res.status(500).json({
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: error
+        }));
+    } catch (error) {
+      res.status(500).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        message: error
+      });
+    }
   };
 
   public update = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const params: CategoryInterface = req.body;
+    try {
+      const { id, establishmentId } = req.params;
+      const { title, description, isVisible } = req.body;
 
-    const update: UpdateOptions = {
-      where: { id: id },
-      limit: 1,
-    };
-
-    await Category.update({ ...params }, update)
-      .then(() => {
-        Category.findByPk(id)
-          .then((node) => res.status(202).json({
-            isSuccessful: true, type: ResponseType.SUCCESS, data: node, message: MESSAGE_UPDATE
-          }))
-          .catch((error: Error) => res.status(500).json({
-            isSuccessful: false, type: ResponseType.DANGER, message: error
-          }));
+      await Category.update({ title, description, isVisible }, {
+        where: {
+          id,
+          establishmentId
+        },
+        limit: 1,
       })
-      .catch((error: Error) => res.status(500).json({
-        isSuccessful: false, type: ResponseType.DANGER, message: error
-      }));
+        .then(() => {
+          Category.findByPk(id)
+            .then((node) => res.status(200).json({
+              isSuccessful: true,
+              type: ResponseType.SUCCESS,
+              data: node,
+              message: MESSAGE_UPDATE
+            }))
+            .catch((error: Error) => res.status(500).json({
+              isSuccessful: false,
+              type: ResponseType.DANGER,
+              message: error
+            }));
+        })
+        .catch((error: Error) => res.status(500).json({
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: error
+        }));
+    } catch (error) {
+      res.status(500).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        message: error
+      });
+    }
   };
 
   public delete = async (req: Request, res: Response) => {
