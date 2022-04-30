@@ -1,19 +1,15 @@
-import { Table } from '../table.model';
 import { Tag } from '../tag.model';
 
 const {
-  checkUniqueIndex,
   checkPropertyExists
 } = require('sequelize-test-helpers');
 
-describe('models/tag', () => {
-  const mock = new Tag();
+describe('Tag', () => {
+  const model = new Tag();
 
-  it('has properties', () => {
-    ;['title'].forEach(checkPropertyExists(mock))
+  it('is defined', () => {
+    expect(model).toBeTruthy();
   });
 
-  it('indexes', () => {
-    ;['id'].forEach(checkUniqueIndex(mock))
-  });
+  ;['title'].forEach(checkPropertyExists(model))
 })

@@ -1,18 +1,15 @@
 import { Dish } from '../dish.model';
 
 const {
-  checkUniqueIndex,
   checkPropertyExists
 } = require('sequelize-test-helpers');
 
-describe('models/dish', () => {
-  const mock = new Dish();
+describe('Dish', () => {
+  const model = new Dish();
 
-  it('has properties', () => {
-    ;['title', 'description', 'warningLabel', 'isVisible', 'isAvailable', 'imageUrl', 'categoryId', 'basePrice'].forEach(checkPropertyExists(mock))
+  it('is defined', () => {
+    expect(model).toBeTruthy();
   });
 
-  it('indexes', () => {
-    ;['id'].forEach(checkUniqueIndex(mock))
-  });
+  ;['title', 'description', 'warningLabel', 'isVisible', 'isAvailable', 'imageUrl', 'basePrice'].forEach(checkPropertyExists(model));
 })

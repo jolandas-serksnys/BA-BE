@@ -152,10 +152,10 @@ export class TableClaimController {
 
     const tokenBody = { ...customer.get({ plain: true }), isEmployee: false };
     const accessToken = jwt.sign(tokenBody, config.secret, {
-      expiresIn: 4320 // 12 hours
+      expiresIn: 4320000 // 12 hours
     });
 
-    res.status(201).json({
+    res.status(200).json({
       isSuccessful: true,
       type: ResponseType.SUCCESS,
       message: MESSAGE_CLAIMED,

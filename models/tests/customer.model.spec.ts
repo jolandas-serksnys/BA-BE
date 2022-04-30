@@ -1,18 +1,15 @@
 import { Customer } from '../customer.model';
 
 const {
-  checkUniqueIndex,
   checkPropertyExists
 } = require('sequelize-test-helpers');
 
-describe('models/customer', () => {
-  const mock = new Customer();
+describe('Customer', () => {
+  const model = new Customer();
 
-  it('has properties', () => {
-    ;['displayName', 'tableClaimId'].forEach(checkPropertyExists(mock))
+  it('is defined', () => {
+    expect(model).toBeTruthy();
   });
 
-  it('indexes', () => {
-    ;['id'].forEach(checkUniqueIndex(mock))
-  });
+  ;['displayName'].forEach(checkPropertyExists(model));
 })

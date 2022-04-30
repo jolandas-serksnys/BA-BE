@@ -295,7 +295,7 @@ export class AuthController {
       .then(async (employee) => {
         await employee.update({ firstName, lastName });
 
-        res.status(201).send({
+        res.status(200).send({
           isSuccessful: true,
           type: ResponseType.SUCCESS,
           data: {
@@ -343,7 +343,7 @@ export class AuthController {
       .then(async (employee) => {
         await employee.update({ password: bcrypt.hashSync(password, 8) });
 
-        res.status(201).send({
+        res.status(200).send({
           isSuccessful: true,
           type: ResponseType.SUCCESS,
           data: {

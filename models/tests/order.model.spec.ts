@@ -1,42 +1,36 @@
 import { CustomerOrder, OrderAddon, TableOrder } from '../order.model';
 
 const {
-  checkUniqueIndex,
   checkPropertyExists
 } = require('sequelize-test-helpers');
 
-describe('models/order/tableOrder', () => {
-  const mock = new TableOrder();
+describe('TableOrder', () => {
+  const model = new TableOrder();
 
-  it('has properties', () => {
-    ;['tableClaimId', 'status'].forEach(checkPropertyExists(mock))
+  it('is defined', () => {
+    expect(model).toBeTruthy();
   });
 
-  it('indexes', () => {
-    ;['id'].forEach(checkUniqueIndex(mock))
-  });
+  ;['tableClaimId', 'status'].forEach(checkPropertyExists(model))
 })
 
-describe('models/order/customerOrder', () => {
-  const mock = new CustomerOrder();
+describe('CustomerOrder', () => {
+  const model = new CustomerOrder();
 
-  it('has properties', () => {
-    ;['title', 'status', 'comment', 'price', 'totalPrice', 'dishId', 'tableOrderId', 'ownerId', 'quantity'].forEach(checkPropertyExists(mock))
+  it('is defined', () => {
+    expect(model).toBeTruthy();
   });
 
-  it('indexes', () => {
-    ;['id'].forEach(checkUniqueIndex(mock))
-  });
+  ;['title', 'status', 'comment', 'price', 'totalPrice', 'tableOrderId', 'ownerId', 'quantity'].forEach(checkPropertyExists(model))
+
 })
 
-describe('models/order/orderAddon', () => {
-  const mock = new OrderAddon();
+describe('OrderAddon', () => {
+  const model = new OrderAddon()
 
-  it('has properties', () => {
-    ;['title', 'price', 'orderId', 'addonId', 'optionId'].forEach(checkPropertyExists(mock))
+  it('is defined', () => {
+    expect(model).toBeTruthy();
   });
 
-  it('indexes', () => {
-    ;['id'].forEach(checkUniqueIndex(mock))
-  });
+  ;['title', 'price'].forEach(checkPropertyExists(model))
 })

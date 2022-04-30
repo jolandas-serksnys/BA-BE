@@ -1,18 +1,15 @@
 import { AssistanceRequest } from '../assistanceRequest.model';
 
 const {
-  checkUniqueIndex,
   checkPropertyExists
 } = require('sequelize-test-helpers');
 
-describe('models/assistanceRequest', () => {
-  const mock = new AssistanceRequest();
+describe('AssistanceRequest', () => {
+  const model = new AssistanceRequest();
 
-  it('has properties', () => {
-    ;['type', 'isHidden', 'message', 'tableClaimId'].forEach(checkPropertyExists(mock))
+  it('is defined', () => {
+    expect(model).toBeTruthy();
   });
 
-  it('indexes', () => {
-    ;['id'].forEach(checkUniqueIndex(mock))
-  });
+  ;['type', 'isHidden', 'message', 'tableClaimId'].forEach(checkPropertyExists(model));
 })

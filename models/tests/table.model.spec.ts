@@ -1,18 +1,15 @@
 import { Table } from '../table.model';
 
 const {
-  checkUniqueIndex,
   checkPropertyExists
 } = require('sequelize-test-helpers');
 
-describe('models/table', () => {
-  const mock = new Table();
+describe('Table', () => {
+  const model = new Table();
 
-  it('has properties', () => {
-    ;['displayName', 'number', 'isAvailable', 'seats'].forEach(checkPropertyExists(mock))
+  it('is defined', () => {
+    expect(model).toBeTruthy();
   });
 
-  it('indexes', () => {
-    ;['id'].forEach(checkUniqueIndex(mock))
-  });
+  ;['displayName', 'number', 'isAvailable', 'seats'].forEach(checkPropertyExists(model));
 })

@@ -11,5 +11,9 @@
     "emitDecoratorMetadata": true,
     "target": "esnext",
     "moduleResolution": "Node",
+    "types": [
+      "node",
+      "jest"
+    ],
   }
 }

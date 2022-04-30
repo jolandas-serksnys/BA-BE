@@ -1,18 +1,15 @@
 import { Addon } from '../addon.model';
 
 const {
-  checkUniqueIndex,
   checkPropertyExists
 } = require('sequelize-test-helpers');
 
-describe('models/addon', () => {
-  const mock = new Addon();
+describe('Addon', () => {
+  const model = new Addon();
 
-  it('has properties', () => {
-    ;['title', 'isOptional', 'dishId', 'isMultiple'].forEach(checkPropertyExists(mock))
+  it('is defined', () => {
+    expect(model).toBeTruthy();
   });
 
-  it('indexes', () => {
-    ;['id'].forEach(checkUniqueIndex(mock))
-  });
-})
+  ;['title', 'isOptional', 'dishId', 'isMultiple'].forEach(checkPropertyExists(model));
+});

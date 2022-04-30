@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import express from "express";
 import bodyParser from "body-parser";
 import { Routes } from "./routes";
@@ -22,6 +24,7 @@ class App {
     this.configApp();
 
     this.server = createServer(this.app);
+    this.server.listen(process.env.PORT || 8080, () => console.log(`App listening on port ${process.env.PORT || 8080}!`));
     this.io = new Server(this.server, { cors: options });
 
     this.routePrv.routes(this.app);
