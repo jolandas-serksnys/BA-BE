@@ -19,7 +19,8 @@ import { Request, Response } from "express";
 import { Op } from "sequelize";
 
 const MESSAGE_404 = 'Table order not found.';
-const MESSAGE_200 = 'Order has been accepted.';
+const MESSAGE_201 = 'Order has been accepted.';
+const MESSAGE_200 = 'Order has been cancelled.';
 const MESSAGE_STATUS = 'Order status has been updated.';
 
 export class OrderController {
@@ -129,10 +130,14 @@ export class OrderController {
         app.io.to(client.id).emit('status', true);
       });
 
-      res.status(200).json({
+      res.status(201).json({
         isSuccessful: true,
         type: ResponseType.SUCCESS,
-        message: MESSAGE_200
+        message: MESSAGE_201,
+        data: {
+          tableOrderId: tableOrder.id,
+          customerOrderId: customerOrder.id
+        }
       });
     } catch (error) {
       res.status(400).json({
@@ -399,7 +404,7 @@ export class OrderController {
     }
   };
 
-  public getCustomerBill = async (req: Request, res: Response) => {
+  public getCustomerReceipt = async (req: Request, res: Response) => {
     try {
       const { userId } = req.body;
 
@@ -438,7 +443,7 @@ export class OrderController {
     }
   };
 
-  public getTableBill = async (req: Request, res: Response) => {
+  public getReceipts = async (req: Request, res: Response) => {
     try {
       const { userId } = req.body;
       const customer = await Customer.findByPk(userId);
@@ -493,7 +498,7 @@ export class OrderController {
     }
   };
 
-  public getTableBillTotal = async (req: Request, res: Response) => {
+  public getTableReceiptTotal = async (req: Request, res: Response) => {
     try {
       const { userId } = req.body;
       const customer = await Customer.findByPk(userId);

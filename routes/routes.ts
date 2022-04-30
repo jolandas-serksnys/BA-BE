@@ -39,6 +39,10 @@ export class Routes {
       .post([verifyToken], this.tableClaimController.toggleAccessRequests);
     app.route(`${process.env.BASE_URL}/assistance`)
       .post([verifyToken], this.tableClaimController.requestAssistance);
+    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table/:id/check-availability`)
+      .get(this.tableClaimController.checkAvailability);
+    app.route(`${process.env.BASE_URL}/order/table/:id/toggle`)
+      .post([verifyToken, isEmployee], this.orderController.toggleTableOrderClaim);
 
     app.route(`${process.env.BASE_URL}/employee/sign-in`)
       .post(this.authController.employeeSignIn);
@@ -70,8 +74,6 @@ export class Routes {
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table`)
       .get(this.tablesController.index)
       .post([verifyToken, isAdmin], this.tablesController.create);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table/:id/check-availability`)
-      .get(this.tableClaimController.checkAvailability);
     app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table/:id`)
       .get(this.tablesController.get)
       .put([verifyToken, isAdmin], this.tablesController.update)
@@ -113,20 +115,18 @@ export class Routes {
       .post(verifyToken, this.orderController.calculatePrice);
     app.route(`${process.env.BASE_URL}/order/table`)
       .post(verifyToken, this.orderController.getTableOrder);
-    app.route(`${process.env.BASE_URL}/order/table/:id/toggle`)
-      .post([verifyToken, isEmployee], this.orderController.toggleTableOrderClaim);
     app.route(`${process.env.BASE_URL}/order/:id/cancel`)
       .post(verifyToken, this.orderController.cancelCustomerOrder);
     app.route(`${process.env.BASE_URL}/order/active`)
       .post([verifyToken, isEmployee], this.orderController.getActiveOrders);
+    app.route(`${process.env.BASE_URL}/order/receipt/customer`)
+      .get([verifyToken], this.orderController.getCustomerReceipt);
+    app.route(`${process.env.BASE_URL}/order/receipt/total`)
+      .get([verifyToken], this.orderController.getTableReceiptTotal);
     app.route(`${process.env.BASE_URL}/order/:id/status`)
       .post([verifyToken, isEmployee], this.orderController.updateStatus);
     app.route(`${process.env.BASE_URL}/order/receipts`)
-      .get([verifyToken], this.orderController.getTableBill);
-    app.route(`${process.env.BASE_URL}/order/receipt/user`)
-      .get([verifyToken], this.orderController.getCustomerBill);
-    app.route(`${process.env.BASE_URL}/order/receipt/total`)
-      .get([verifyToken], this.orderController.getTableBillTotal);
+      .get([verifyToken], this.orderController.getReceipts);
 
     app.route(`${process.env.BASE_URL}/claim/:id/toggle-seats-limit`)
       .post([verifyToken, isEmployee], this.tableClaimController.toggleSeatsLimitBypass);
