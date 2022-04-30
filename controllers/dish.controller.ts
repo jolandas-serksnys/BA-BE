@@ -1,5 +1,6 @@
 import {
   Addon,
+  Category,
   Dish,
   DishInterface,
   Option,
@@ -93,7 +94,7 @@ export class DishController {
       const { categoryId } = req.params;
       const { tags, ...params } = req.body;
 
-      await Dish.create<Dish>({ ...params, categoryId: categoryId })
+      await Dish.create<Dish>({ ...params, categoryId })
         .then((node: Dish) => {
           tags.forEach(async (tag) => {
             await Tag.create<Tag>({
@@ -189,7 +190,7 @@ export class DishController {
       await Dish.update({ ...params }, update)
         .then(() => {
           Dish.findByPk(id)
-            .then((node) => res.status(202).json({
+            .then((node) => res.status(200).json({
               isSuccessful: true,
               type: ResponseType.SUCCESS,
               data: node,
@@ -334,48 +335,35 @@ export class DishController {
 
   public indexAddons = async (req: Request, res: Response) => {
     try {
-      const { categoryId, id } = req.params;
+      const { establishmentId, categoryId, id } = req.params;
 
-      await Dish.findOne({
-        where: {
-          id,
-          categoryId
-        },
-      })
-        .then((node: Dish) => {
-          if (node) {
-            Addon.findAll({
-              where: { dishId: id },
-              include: [
-                {
-                  model: Option,
-                  as: 'options'
-                }
-              ]
-            })
-              .then((nodes: Addon[]) => res.json({
-                isSuccessful: true,
-                type: ResponseType.SUCCESS,
-                data: nodes
-              }))
-              .catch((error: Error) => res.status(500).json({
-                isSuccessful: false,
-                type: ResponseType.DANGER,
-                message: error
-              }));
-          } else {
-            res.status(404).json({
-              isSuccessful: false,
-              type: ResponseType.DANGER,
-              message: MESSAGE_404
-            });
-          }
-        })
-        .catch((error: Error) => res.status(500).json({
+      const category = await Category.findOne({
+        where: { id: categoryId, establishmentId }
+      });
+
+      const dish = await Dish.findOne({
+        where: { id, categoryId }
+      });
+
+      if (!dish || !category) {
+        return res.status(404).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
-          message: error
-        }));
+          message: MESSAGE_404
+        });
+      }
+
+      const addons = await Addon.findAll({
+        where: {
+          dishId: id,
+        }
+      });
+
+      res.status(200).json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: addons,
+      });
     } catch (error) {
       res.status(500).json({
         isSuccessful: false,
@@ -419,7 +407,8 @@ export class DishController {
                 res.status(200).json({
                   isSuccessful: true,
                   type: ResponseType.SUCCESS,
-                  message: MESSAGE_ADDON_CREATE
+                  message: MESSAGE_ADDON_CREATE,
+                  data: node,
                 });
               })
           } else {
