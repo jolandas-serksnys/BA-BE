@@ -356,7 +356,11 @@ export class DishController {
       const addons = await Addon.findAll({
         where: {
           dishId: id,
-        }
+        },
+        include: [{
+          model: Option,
+          as: 'options',
+        }],
       });
 
       res.status(200).json({
