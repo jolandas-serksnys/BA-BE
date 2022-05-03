@@ -170,7 +170,7 @@ export class AuthController {
           password: undefined,
           isEmployee: true
         };
-        const token = jwt.sign(tokenBody, config.secret, {
+        const token = jwt.sign(tokenBody, process.env.SECRET, {
           expiresIn: 86400 // 24 hours
         });
 
@@ -259,7 +259,7 @@ export class AuthController {
           password: undefined,
           isEmployee: true
         };
-        const token = jwt.sign(tokenBody, config.secret, {
+        const token = jwt.sign(tokenBody, process.env.SECRET, {
           expiresIn: 86400 // 24 hours
         });
 

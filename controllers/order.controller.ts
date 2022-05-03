@@ -22,6 +22,7 @@ const MESSAGE_404 = 'Table order not found.';
 const MESSAGE_201 = 'Order has been accepted.';
 const MESSAGE_200 = 'Order has been cancelled.';
 const MESSAGE_STATUS = 'Order status has been updated.';
+const MESSAGE_CLAIM_CLOSED = 'Table claim has been closed and ordering new dishes is not possible.';
 
 export class OrderController {
   public async calculatePrice(req: Request, res: Response) {
@@ -56,6 +57,22 @@ export class OrderController {
   public processOrder = async (req: Request, res: Response) => {
     try {
       const { tableClaimId, dishId, options, comment, quantity, userId } = req.body;
+
+      const tableClaim = await TableClaim.findOne({
+        where: {
+          id: tableClaimId,
+          status: TableClaimStatus.ACTIVE
+        }
+      });
+
+      if (!tableClaim) {
+        return res.status(404).json({
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: MESSAGE_CLAIM_CLOSED
+        });
+      }
+
       const claimClients = await new TableClaimController().getRelevantSocketClients(tableClaimId);
 
       let tableOrder;
@@ -262,6 +279,14 @@ export class OrderController {
         ]
       });
 
+      if (!customerOrder) {
+        return res.status(404).json({
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: MESSAGE_404
+        });
+      }
+
       const tableOrder = await TableOrder.findByPk(customerOrder.tableOrderId);
 
       if (customerOrder) {
@@ -370,6 +395,14 @@ export class OrderController {
 
       if (tableOrder) {
         const tableClaim = await TableClaim.findByPk(tableOrder.tableClaimId);
+
+        if (!tableClaim) {
+          return res.status(404).json({
+            isSuccessful: false,
+            type: ResponseType.DANGER,
+            message: MESSAGE_404
+          });
+        }
 
         await tableClaim.update({
           status: (tableClaim.status === TableClaimStatus.ACTIVE ?

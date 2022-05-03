@@ -12,7 +12,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     });
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({
         message: "Unauthorized!"

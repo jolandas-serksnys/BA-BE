@@ -26,113 +26,113 @@ export class Routes {
   public orderController: OrderController = new OrderController();
 
   public routes(app): void {
-    app.route(`${process.env.BASE_URL}/`)
+    app.route(`/api/`)
       .get(this.tablesController.index);
 
-    app.route(`${process.env.BASE_URL}/user`)
+    app.route(`/api/user`)
       .get(this.authController.getUser);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/sign-in`)
+    app.route(`/api/establishment/:establishmentId/sign-in`)
       .post(this.authController.customerSignIn);
-    app.route(`${process.env.BASE_URL}/claimed`)
+    app.route(`/api/claimed`)
       .get([verifyToken], this.tableClaimController.getClaimed);
-    app.route(`${process.env.BASE_URL}/toggle-access-requests`)
+    app.route(`/api/toggle-access-requests`)
       .post([verifyToken], this.tableClaimController.toggleAccessRequests);
-    app.route(`${process.env.BASE_URL}/assistance`)
+    app.route(`/api/assistance`)
       .post([verifyToken], this.tableClaimController.requestAssistance);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table/:id/check-availability`)
+    app.route(`/api/establishment/:establishmentId/table/:id/check-availability`)
       .get(this.tableClaimController.checkAvailability);
-    app.route(`${process.env.BASE_URL}/order/table/:id/toggle`)
+    app.route(`/api/order/table/:id/toggle`)
       .post([verifyToken, isEmployee], this.orderController.toggleTableOrderClaim);
 
-    app.route(`${process.env.BASE_URL}/employee/sign-in`)
+    app.route(`/api/employee/sign-in`)
       .post(this.authController.employeeSignIn);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/employee/sign-up`)
+    app.route(`/api/establishment/:establishmentId/employee/sign-up`)
       .post(checkDuplicate, this.authController.employeeSignUp);
-    app.route(`${process.env.BASE_URL}/employee/update-account`)
+    app.route(`/api/employee/update-account`)
       .post([verifyToken, isEmployee], this.authController.employeeUpdateAccount);
-    app.route(`${process.env.BASE_URL}/employee/update-password`)
+    app.route(`/api/employee/update-password`)
       .post([verifyToken, isEmployee], this.authController.employeeUpdatePassword);
 
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/employee`)
+    app.route(`/api/establishment/:establishmentId/employee`)
       .get([verifyToken, isAdmin], this.employeeController.index);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/employee/:id`)
+    app.route(`/api/establishment/:establishmentId/employee/:id`)
       .get([verifyToken, isAdmin], this.employeeController.get)
       .put([verifyToken, isAdmin], this.employeeController.update)
       .delete([verifyToken, isAdmin], this.employeeController.delete);
 
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/sign-up-code`)
+    app.route(`/api/establishment/:establishmentId/sign-up-code`)
       .get([verifyToken, isAdmin], this.employeeController.indexSignUpCodes)
       .post([verifyToken, isAdmin], this.employeeController.createSignUpCode);
 
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/sign-up-code/:id`)
+    app.route(`/api/establishment/:establishmentId/sign-up-code/:id`)
       .delete([verifyToken, isAdmin], this.employeeController.deleteSignUpCode);
 
-    app.route(`${process.env.BASE_URL}/establishment/:id`)
+    app.route(`/api/establishment/:id`)
       .get(this.establishmentController.get)
       .put([verifyToken, isAdmin], this.establishmentController.update);
 
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table`)
+    app.route(`/api/establishment/:establishmentId/table`)
       .get(this.tablesController.index)
       .post([verifyToken, isAdmin], this.tablesController.create);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table/:id`)
+    app.route(`/api/establishment/:establishmentId/table/:id`)
       .get(this.tablesController.get)
       .put([verifyToken, isAdmin], this.tablesController.update)
       .delete([verifyToken, isAdmin], this.tablesController.delete);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/table/:id/toggle-availability`)
+    app.route(`/api/establishment/:establishmentId/table/:id/toggle-availability`)
       .post([verifyToken, isAdmin], this.tablesController.toggleAvailability);
 
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category`)
+    app.route(`/api/establishment/:establishmentId/category`)
       .get(this.categoryController.index)
       .post([verifyToken, isAdmin], this.categoryController.create);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:id`)
+    app.route(`/api/establishment/:establishmentId/category/:id`)
       .get(this.categoryController.get)
       .put([verifyToken, isAdmin], this.categoryController.update)
       .delete([verifyToken, isAdmin], this.categoryController.delete);
 
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish`)
+    app.route(`/api/establishment/:establishmentId/category/:categoryId/dish`)
       .get(this.dishController.index)
       .post([verifyToken, isAdmin], this.dishController.create);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/all`)
+    app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/all`)
       .get(this.dishController.indexEmployee);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/:id`)
+    app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:id`)
       .get(this.dishController.get)
       .put([verifyToken, isAdmin], this.dishController.update)
       .delete([verifyToken, isAdmin], this.dishController.delete);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/:id/toggle-availability`)
+    app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:id/toggle-availability`)
       .post([verifyToken, isAdmin], this.dishController.toggleAvailability);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/:id/toggle-visibility`)
+    app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:id/toggle-visibility`)
       .post([verifyToken, isAdmin], this.dishController.toggleVisibility);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/:id/addons`)
+    app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:id/addons`)
       .get([verifyToken, isAdmin], this.dishController.indexAddons)
       .post([verifyToken, isAdmin], this.dishController.createAddon);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/category/:categoryId/dish/:dishId/addons/:id`)
+    app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:dishId/addons/:id`)
       .put([verifyToken, isAdmin], this.dishController.updateAddon)
       .delete([verifyToken, isAdmin], this.dishController.deleteAddon);
 
-    app.route(`${process.env.BASE_URL}/order`)
+    app.route(`/api/order`)
       .post(verifyToken, this.orderController.processOrder);
-    app.route(`${process.env.BASE_URL}/order/price`)
+    app.route(`/api/order/price`)
       .post(verifyToken, this.orderController.calculatePrice);
-    app.route(`${process.env.BASE_URL}/order/table`)
+    app.route(`/api/order/table`)
       .post(verifyToken, this.orderController.getTableOrder);
-    app.route(`${process.env.BASE_URL}/order/:id/cancel`)
+    app.route(`/api/order/:id/cancel`)
       .post(verifyToken, this.orderController.cancelCustomerOrder);
-    app.route(`${process.env.BASE_URL}/order/active`)
+    app.route(`/api/order/active`)
       .post([verifyToken, isEmployee], this.orderController.getActiveOrders);
-    app.route(`${process.env.BASE_URL}/order/receipt/customer`)
+    app.route(`/api/order/receipt/customer`)
       .get([verifyToken], this.orderController.getCustomerReceipt);
-    app.route(`${process.env.BASE_URL}/order/receipt/total`)
+    app.route(`/api/order/receipt/total`)
       .get([verifyToken], this.orderController.getTableReceiptTotal);
-    app.route(`${process.env.BASE_URL}/order/:id/status`)
+    app.route(`/api/order/:id/status`)
       .post([verifyToken, isEmployee], this.orderController.updateStatus);
-    app.route(`${process.env.BASE_URL}/order/receipts`)
+    app.route(`/api/order/receipts`)
       .get([verifyToken], this.orderController.getReceipts);
 
-    app.route(`${process.env.BASE_URL}/claim/:id/toggle-seats-limit`)
+    app.route(`/api/claim/:id/toggle-seats-limit`)
       .post([verifyToken, isEmployee], this.tableClaimController.toggleSeatsLimitBypass);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/assistance-requests`)
+    app.route(`/api/establishment/:establishmentId/assistance-requests`)
       .get([verifyToken, isEmployee], this.tableClaimController.getAssistanceRequests);
-    app.route(`${process.env.BASE_URL}/establishment/:establishmentId/assistance-requests/:id/dismiss`)
+    app.route(`/api/establishment/:establishmentId/assistance-requests/:id/dismiss`)
       .post([verifyToken, isEmployee], this.tableClaimController.dismissAssistanceRequest);
   }
 }

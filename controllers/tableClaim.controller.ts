@@ -151,7 +151,7 @@ export class TableClaimController {
     });
 
     const tokenBody = { ...customer.get({ plain: true }), isEmployee: false };
-    const accessToken = jwt.sign(tokenBody, config.secret, {
+    const accessToken = jwt.sign(tokenBody, process.env.SECRET, {
       expiresIn: 4320000 // 12 hours
     });
 

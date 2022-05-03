@@ -39,7 +39,7 @@ const createAdmin = async (establishmentId: number) => {
       isEmployee: true
     };
 
-    token = jwt.sign(tokenBody, config.secret, {
+    token = jwt.sign(tokenBody, process.env.SECRET, {
       expiresIn: 86400 // 24 hours
     });
   });
@@ -582,7 +582,7 @@ describe('order.controller', () => {
             isEmployee: false
           };
 
-          token = jwt.sign(tokenBody, config.secret, {
+          token = jwt.sign(tokenBody, process.env.SECRET, {
             expiresIn: 86400 // 24 hours
           });
         });
