@@ -172,47 +172,38 @@ export class TableClaimController {
   };
 
   public toggleAccessRequests = async (req: Request, res: Response) => {
-    const { userId } = req.body;
+    try {
+      const { userId } = req.body;
 
-    const customer = await Customer.findByPk(userId);
-    const tableClaim = await TableClaim.findByPk(customer.getDataValue('tableClaimId'));
+      const customer = await Customer.findByPk(userId);
+      const tableClaim = await TableClaim.findByPk(customer.getDataValue('tableClaimId'));
 
-    if (!tableClaim || !customer) {
-      return res.status(404).json({
-        isSuccessful: false,
-        type: ResponseType.DANGER,
-        message: MESSAGE_404
-      });
-    }
-
-    if (tableClaim) {
       const requestCode = generateCode(6);
 
       await tableClaim.update({
         requestsEnabled: !tableClaim.getDataValue('requestsEnabled'),
         requestCode
       })
-        .then(() => {
-          res.status(200).json({
-            isSuccessful: true,
-            type: ResponseType.SUCCESS,
-            message: tableClaim.requestsEnabled
-              ? MESSAGE_REQUESTS_TOGGLED_ON : MESSAGE_REQUESTS_TOGGLED_OFF
-          });
-        });
-    } else {
-      res.status(404).json({
+
+      const claimClients = await this.getRelevantSocketClients(tableClaim.id);
+
+      claimClients.forEach((client) => {
+        app.io.to(client.id).emit('joined', true);
+      });
+
+      res.status(200).json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        message: tableClaim.requestsEnabled
+          ? MESSAGE_REQUESTS_TOGGLED_ON : MESSAGE_REQUESTS_TOGGLED_OFF
+      });
+    } catch (error) {
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
-        message: MESSAGE_404
+        message: error.message
       });
     }
-
-    const claimClients = await this.getRelevantSocketClients(tableClaim.id);
-
-    claimClients.forEach((client) => {
-      app.io.to(client.id).emit('joined', true);
-    });
   };
 
   public getClaimed = async (req: Request, res: Response) => {
@@ -273,7 +264,7 @@ export class TableClaimController {
           }
         });
       })
-      .catch((error: Error) => res.status(500).json({
+      .catch((error: Error) => res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -315,35 +306,36 @@ export class TableClaimController {
   };
 
   public requestAssistance = async (req: Request, res: Response) => {
-    const { userId, type, message } = req.body;
-    const customer = await Customer.findByPk(userId);
-    const tableClaim = await TableClaim.findByPk(customer.tableClaimId);
+    try {
+      const { userId, type, message } = req.body;
+      const customer = await Customer.findByPk(userId);
+      const tableClaim = await TableClaim.findByPk(customer.tableClaimId);
 
-    if (!tableClaim || !customer) {
-      return res.status(404).json({
+      const assistanceRequest = await AssistanceRequest.create({
+        type,
+        message,
+        tableClaimId: tableClaim.id
+      });
+
+      const claimClients = await this.getRelevantSocketClients(tableClaim.id);
+
+      claimClients.forEach((client) => {
+        app.io.to(client.id).emit('status', true);
+      });
+
+      res.status(200).json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        message: MESSAGE_ASSISTANCE_REQUESTED,
+        data: assistanceRequest
+      });
+    } catch (error) {
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
-        message: MESSAGE_404
+        data: error
       });
     }
-
-    await AssistanceRequest.create({
-      type,
-      message,
-      tableClaimId: tableClaim.id
-    });
-
-    const claimClients = await this.getRelevantSocketClients(tableClaim.id);
-
-    claimClients.forEach((client) => {
-      app.io.to(client.id).emit('status', true);
-    });
-
-    res.status(200).json({
-      isSuccessful: true,
-      type: ResponseType.SUCCESS,
-      message: MESSAGE_ASSISTANCE_REQUESTED
-    });
   };
 
   public getAssistanceRequests = async (req: Request, res: Response) => {

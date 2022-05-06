@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { UpdateOptions } from 'sequelize';
 import { Establishment, EstablishmentInterface } from '../models';
 import { ResponseType } from '../utils';
 
@@ -11,29 +10,23 @@ export class EstablishmentController {
     try {
       const id: number = parseInt(req.params.id);
 
-      Establishment.findByPk<Establishment>(id)
-        .then((node: Establishment | null) => {
-          if (node) {
-            res.json({
-              isSuccessful: true,
-              type: ResponseType.SUCCESS,
-              data: node
-            });
-          } else {
-            res.status(404).json({
-              isSuccessful: false,
-              type: ResponseType.DANGER,
-              message: MESSAGE_404
-            });
-          }
-        })
-        .catch((error: Error) => res.status(500).json({
+      const establishment = await Establishment.findByPk<Establishment>(id);
+
+      if (establishment) {
+        res.status(200).json({
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          data: establishment
+        });
+      } else {
+        res.status(404).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
-          message: error
-        }));
+          message: MESSAGE_404
+        });
+      }
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -46,26 +39,29 @@ export class EstablishmentController {
       const id: number = parseInt(req.params.id);
       const params: EstablishmentInterface = req.body;
 
-      const update: UpdateOptions = {
-        where: { id: id },
-        limit: 1,
-      };
+      const establishment = await Establishment.findByPk<Establishment>(id);
 
-      Establishment.update({ ...params }, update)
-        .then(() => {
-          Establishment.findByPk(id)
-            .then((node) => res.status(202).json({
-              isSuccessful: true, type: ResponseType.SUCCESS, data: node, message: MESSAGE_UPDATE
-            }))
-            .catch((error: Error) => res.status(500).json({
-              isSuccessful: false, type: ResponseType.DANGER, message: error
-            }));
+      if (establishment) {
+        await Establishment.update(params, {
+          where: { id },
+          limit: 1,
+        });
+
+        res.status(200).json({
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          data: establishment,
+          message: MESSAGE_UPDATE
         })
-        .catch((error: Error) => res.status(500).json({
-          isSuccessful: false, type: ResponseType.DANGER, message: error
-        }));
+      } else {
+        res.status(404).json({
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: MESSAGE_404
+        });
+      }
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error

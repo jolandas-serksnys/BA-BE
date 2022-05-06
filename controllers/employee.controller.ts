@@ -10,154 +10,192 @@ const MESSAGE_204_SIGNUP = "Signup code deleted successfully";
 
 export class EmployeeController {
   public index = async (req: Request, res: Response) => {
-    const { establishmentId } = req.params;
+    try {
+      const { establishmentId } = req.params;
 
-    const nodes = await Employee.findAll<Employee>({
-      where: {
-        establishmentId
-      },
-    });
+      const nodes = await Employee.findAll<Employee>({
+        where: {
+          establishmentId
+        },
+      });
 
-    return res.json({
-      isSuccessful: true,
-      type: ResponseType.SUCCESS,
-      data: nodes
-    })
+      res.json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: nodes
+      })
+    } catch (error) {
+      res.status(400).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        message: error
+      });
+    }
   };
 
   public get = async (req: Request, res: Response) => {
-    const { establishmentId, id } = req.params;
+    try {
+      const { establishmentId, id } = req.params;
 
-    await Employee.findOne<Employee>({
-      where: {
-        id,
-        establishmentId
-      },
-      attributes: ['id', 'firstName', 'lastName', 'email', 'role']
+      const employee = await Employee.findOne<Employee>({
+        where: {
+          id,
+          establishmentId
+        },
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role']
 
-    })
-      .then((Employee: Employee | null) => {
-        if (Employee) {
-          res.json({
-            isSuccessful: true,
-            type: ResponseType.SUCCESS,
-            data: Employee
-          });
-        } else {
-          res.status(404).json({
-            isSuccessful: false,
-            type: ResponseType.DANGER,
-            message: MESSAGE_404
-          });
-        }
-      })
-      .catch((err: Error) => res.status(500).json({
+      });
+
+      if (employee) {
+        res.json({
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          data: employee
+        });
+      } else {
+        res.status(404).json({
+          isSuccessful: false,
+          type: ResponseType.DANGER,
+          message: MESSAGE_404
+        });
+      }
+
+    } catch (error) {
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
-        message: err.message
-      }));
+        message: error
+      });
+    }
   };
 
   public update = async (req: Request, res: Response) => {
-    const { establishmentId, id } = req.params;
-    const params: EmployeeInterface = req.body;
+    try {
+      const { establishmentId, id } = req.params;
+      const params: EmployeeInterface = req.body;
 
-    await Employee.update(params, {
-      where: {
-        id,
-        establishmentId
-      },
-      limit: 1,
-    })
-      .then(() => res.status(202).json({
-        isSuccessful: true,
-        type: ResponseType.SUCCESS,
-        message: MESSAGE_202
-      }))
-      .catch((err: Error) => res.status(500).json({
+      await Employee.update(params, {
+        where: {
+          id,
+          establishmentId
+        },
+        limit: 1,
+      })
+        .then(() => res.status(200).json({
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          message: MESSAGE_202
+        }));
+    } catch (error) {
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
-        message: err.message
-      }));
+        message: error
+      });
+    }
   };
 
   public delete = async (req: Request, res: Response) => {
-    const { establishmentId, id } = req.params;
+    try {
+      const { establishmentId, id } = req.params;
 
-    await Employee.destroy({
-      where: {
-        id,
-        establishmentId
-      },
-      limit: 1,
-    })
-      .then(() => res.status(204).json({
+      await Employee.destroy({
+        where: {
+          id,
+          establishmentId
+        },
+        limit: 1,
+      });
+
+      res.status(200).json({
         isSuccessful: true,
         type: ResponseType.SUCCESS,
         message: MESSAGE_204
-      }))
-      .catch((err: Error) => res.status(500).json({
+      })
+
+    } catch (error) {
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
-        message: err.message
-      }));
+        message: error
+      });
+    }
   };
 
   public indexSignUpCodes = async (req: Request, res: Response) => {
-    const { establishmentId } = req.params;
+    try {
+      const { establishmentId } = req.params;
 
-    const nodes = await SignUpCode.findAll<SignUpCode>({
-      where: {
-        establishmentId,
-        isClaimed: false
-      },
-    });
+      const nodes = await SignUpCode.findAll<SignUpCode>({
+        where: {
+          establishmentId,
+          isClaimed: false
+        },
+      });
 
-    return res.json({
-      isSuccessful: true,
-      type: ResponseType.SUCCESS,
-      data: nodes
-    });
+      return res.json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: nodes
+      });
+    } catch (error) {
+      res.status(400).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        message: error
+      });
+    }
   };
 
   public createSignUpCode = async (req: Request, res: Response) => {
-    const { establishmentId } = req.params;
-    const { role } = req.body;
+    try {
+      const { establishmentId } = req.params;
+      const { role } = req.body;
 
-    const code = generateCode(6);
+      const code = generateCode(6);
 
-    const newCode = await SignUpCode.create({
-      establishmentId,
-      code,
-      role
-    });
+      const newCode = await SignUpCode.create({
+        establishmentId,
+        code,
+        role
+      });
 
-    return res.json({
-      isSuccessful: true,
-      type: ResponseType.SUCCESS,
-      data: newCode
-    });
+      res.status(201).json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: newCode
+      });
+    } catch (error) {
+      res.status(400).json({
+        isSuccessful: false,
+        type: ResponseType.DANGER,
+        message: error
+      });
+    }
   };
 
   public deleteSignUpCode = async (req: Request, res: Response) => {
-    const { establishmentId, id } = req.params;
+    try {
+      const { establishmentId, id } = req.params;
 
-    await SignUpCode.destroy({
-      where: {
-        id,
-        establishmentId
-      },
-      limit: 1,
-    })
-      .then(() => res.status(204).json({
-        isSuccessful: true,
-        type: ResponseType.SUCCESS,
-        message: MESSAGE_204_SIGNUP
-      }))
-      .catch((err: Error) => res.status(500).json({
+      await SignUpCode.destroy({
+        where: {
+          id,
+          establishmentId
+        },
+        limit: 1,
+      })
+        .then(() => res.status(200).json({
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          message: MESSAGE_204_SIGNUP
+        }));
+    } catch (error) {
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
-        message: err.message
-      }));
+        message: error
+      });
+    }
   };
 }

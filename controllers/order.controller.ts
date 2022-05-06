@@ -191,18 +191,11 @@ export class OrderController {
         order: [['customer_orders', 'updatedAt', 'DESC']]
       });
 
-      if (tableOrder) {
-        res.status(200).json({
-          isSuccessful: true,
-          type: ResponseType.SUCCESS,
-          data: tableOrder
-        });
-      } else {
-        res.status(200).json({
-          isSuccessful: true,
-          type: ResponseType.SUCCESS
-        });
-      }
+      res.status(200).json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: tableOrder
+      });
     } catch (error) {
       res.status(400).json({
         isSuccessful: false,
@@ -231,14 +224,14 @@ export class OrderController {
         const tableOrder = await TableOrder.findByPk(customerOrder.tableOrderId);
         const claimClients = await new TableClaimController().getRelevantSocketClients(tableOrder.tableClaimId);
 
+        claimClients.forEach((client) => {
+          app.io.to(client.id).emit('status', true);
+        });
+
         res.status(200).json({
           isSuccessful: true,
           type: ResponseType.SUCCESS,
           message: MESSAGE_200
-        });
-
-        claimClients.forEach((client) => {
-          app.io.to(client.id).emit('status', true);
         });
       } else {
         res.status(404).json({

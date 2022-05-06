@@ -26,7 +26,7 @@ export class CategoryController {
         data: categories
       })
     } catch (error) {
-      return res.status(500).json({
+      return res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -46,13 +46,13 @@ export class CategoryController {
           data: node,
           message: MESSAGE_CREATE
         }))
-        .catch((error: Error) => res.status(500).json({
+        .catch((error: Error) => res.status(400).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
           message: error
         }));
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -85,13 +85,13 @@ export class CategoryController {
             });
           }
         })
-        .catch((error: Error) => res.status(500).json({
+        .catch((error: Error) => res.status(400).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
           message: error
         }));
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -119,19 +119,19 @@ export class CategoryController {
               data: node,
               message: MESSAGE_UPDATE
             }))
-            .catch((error: Error) => res.status(500).json({
+            .catch((error: Error) => res.status(400).json({
               isSuccessful: false,
               type: ResponseType.DANGER,
               message: error
             }));
         })
-        .catch((error: Error) => res.status(500).json({
+        .catch((error: Error) => res.status(400).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
           message: error
         }));
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -158,7 +158,7 @@ export class CategoryController {
                 data: node,
                 message: MESSAGE_DELETE
               }))
-              .catch((error: Error) => res.status(500).json({
+              .catch((error: Error) => res.status(400).json({
                 isSuccessful: false,
                 type: ResponseType.DANGER,
                 message: error
@@ -171,13 +171,13 @@ export class CategoryController {
             });
           }
         })
-        .catch((error: Error) => res.status(500).json({
+        .catch((error: Error) => res.status(400).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
           message: error
         }));
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error

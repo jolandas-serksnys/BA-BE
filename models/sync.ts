@@ -1,19 +1,8 @@
-import { Addon } from "./addon.model";
-import { AssistanceRequest } from "./assistanceRequest.model";
-import { Category } from "./category.model";
-import { Customer } from "./customer.model";
-import { Dish } from "./dish.model";
-import { Employee, SignUpCode } from "./employee.model";
-import { Establishment } from "./establishment.model";
-import { Option } from "./option.model";
-import { CustomerOrder, OrderAddon, TableOrder } from "./order.model";
-import { Table } from "./table.model";
-import { TableClaim } from "./tableClaim.model";
-import { Tag } from "./tag.model";
+
 
 require('dotenv').config();
 
-export const Sync = async () => {
+export const Sync = async () => {/*
   if (process.env.SYNC === 'true') {
     try {
       await Establishment.sync({ force: true }).then(() => console.log("Establishments table created"));
@@ -45,7 +34,7 @@ export const Sync = async () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  }*/
 };
 
 Sync();

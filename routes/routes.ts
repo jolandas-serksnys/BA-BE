@@ -30,7 +30,7 @@ export class Routes {
       .get(this.tablesController.index);
 
     app.route(`/api/user`)
-      .get(this.authController.getUser);
+      .get([verifyToken], this.authController.getUser);
     app.route(`/api/establishment/:establishmentId/sign-in`)
       .post(this.authController.customerSignIn);
     app.route(`/api/claimed`)
@@ -68,41 +68,41 @@ export class Routes {
       .delete([verifyToken, isAdmin], this.employeeController.deleteSignUpCode);
 
     app.route(`/api/establishment/:id`)
-      .get(this.establishmentController.get)
+      .get([verifyToken], this.establishmentController.get)
       .put([verifyToken, isAdmin], this.establishmentController.update);
 
     app.route(`/api/establishment/:establishmentId/table`)
-      .get(this.tablesController.index)
+      .get([verifyToken], this.tablesController.index)
       .post([verifyToken, isAdmin], this.tablesController.create);
     app.route(`/api/establishment/:establishmentId/table/:id`)
-      .get(this.tablesController.get)
+      .get([verifyToken], this.tablesController.get)
       .put([verifyToken, isAdmin], this.tablesController.update)
       .delete([verifyToken, isAdmin], this.tablesController.delete);
     app.route(`/api/establishment/:establishmentId/table/:id/toggle-availability`)
       .post([verifyToken, isAdmin], this.tablesController.toggleAvailability);
 
     app.route(`/api/establishment/:establishmentId/category`)
-      .get(this.categoryController.index)
+      .get([verifyToken], this.categoryController.index)
       .post([verifyToken, isAdmin], this.categoryController.create);
     app.route(`/api/establishment/:establishmentId/category/:id`)
-      .get(this.categoryController.get)
+      .get([verifyToken], this.categoryController.get)
       .put([verifyToken, isAdmin], this.categoryController.update)
       .delete([verifyToken, isAdmin], this.categoryController.delete);
 
     app.route(`/api/establishment/:establishmentId/category/:categoryId/dish`)
-      .get(this.dishController.index)
+      .get([verifyToken], this.dishController.index)
       .post([verifyToken, isAdmin], this.dishController.create);
     app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/all`)
-      .get(this.dishController.indexEmployee);
+      .get([verifyToken, isEmployee], this.dishController.indexEmployee);
     app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:id`)
-      .get(this.dishController.get)
+      .get([verifyToken], this.dishController.get)
       .put([verifyToken, isAdmin], this.dishController.update)
       .delete([verifyToken, isAdmin], this.dishController.delete);
     app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:id/toggle-availability`)
       .post([verifyToken, isAdmin], this.dishController.toggleAvailability);
     app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:id/toggle-visibility`)
       .post([verifyToken, isAdmin], this.dishController.toggleVisibility);
-    app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:id/addons`)
+    app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:id/addon`)
       .get([verifyToken, isAdmin], this.dishController.indexAddons)
       .post([verifyToken, isAdmin], this.dishController.createAddon);
     app.route(`/api/establishment/:establishmentId/category/:categoryId/dish/:dishId/addons/:id`)

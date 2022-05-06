@@ -30,14 +30,9 @@ export class TableController {
           isSuccessful: true,
           type: ResponseType.SUCCESS,
           data: nodes
-        }))
-        .catch((error: Error) => res.status(500).json({
-          isSuccessful: false,
-          type: ResponseType.DANGER,
-          message: error
         }));
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -75,14 +70,9 @@ export class TableController {
             data: node,
             message: MESSAGE_CREATE
           })
-        })
-        .catch((error: Error) => res.status(500).json({
-          isSuccessful: false,
-          type: ResponseType.DANGER,
-          message: error
-        }));
+        });
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -94,34 +84,28 @@ export class TableController {
     try {
       const { establishmentId, id } = req.params;
 
-      await Table.findOne<Table>({
+      const table = await Table.findOne<Table>({
         where: {
-          id,
-          establishmentId
+          establishmentId,
+          id
         }
-      })
-        .then((node: Table | null) => {
-          if (node) {
-            res.json({
-              isSuccessful: true,
-              type: ResponseType.SUCCESS,
-              data: node
-            });
-          } else {
-            res.status(404).json({
-              isSuccessful: false,
-              type: ResponseType.DANGER,
-              message: MESSAGE_404
-            });
-          }
-        })
-        .catch((error: Error) => res.status(500).json({
+      });
+
+      if (!table) {
+        return res.status(404).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
-          message: error
-        }));
+          message: MESSAGE_404
+        });
+      }
+
+      res.json({
+        isSuccessful: true,
+        type: ResponseType.SUCCESS,
+        data: table
+      });
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -158,13 +142,13 @@ export class TableController {
             message: MESSAGE_UPDATE
           })
         })
-        .catch((error: Error) => res.status(500).json({
+        .catch((error: Error) => res.status(400).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
           message: error
         }));
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -196,14 +180,14 @@ export class TableController {
             type: ResponseType.SUCCESS,
             data: node, message: MESSAGE_DELETE
           }))
-          .catch((error: Error) => res.status(500).json({
+          .catch((error: Error) => res.status(400).json({
             isSuccessful: false,
             type: ResponseType.DANGER,
             message: error
           }));
       });
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
@@ -215,36 +199,30 @@ export class TableController {
     try {
       const { establishmentId, id } = req.params;
 
-      await Table.findOne({
+      const table = await Table.findOne({
         where: {
           id,
           establishmentId
         }
-      })
-        .then(async (node) => {
-          if (node) {
-            await node.update({ isAvailable: !node.isAvailable });
-            res.status(200).json({
-              isSuccessful: true,
-              type: ResponseType.SUCCESS,
-              data: node,
-              message: MESSAGE_UPDATE
-            });
-          } else {
-            res.status(404).json({
-              isSuccessful: false,
-              type: ResponseType.DANGER,
-              message: MESSAGE_404
-            });
-          }
-        })
-        .catch((error: Error) => res.status(500).json({
+      });
+
+      if (table) {
+        await table.update({ isAvailable: !table.isAvailable });
+        res.status(200).json({
+          isSuccessful: true,
+          type: ResponseType.SUCCESS,
+          data: table,
+          message: MESSAGE_UPDATE
+        });
+      } else {
+        res.status(404).json({
           isSuccessful: false,
           type: ResponseType.DANGER,
-          message: error
-        }));
+          message: MESSAGE_404
+        });
+      }
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         isSuccessful: false,
         type: ResponseType.DANGER,
         message: error
