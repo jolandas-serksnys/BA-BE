@@ -11,5 +11,5 @@ describe('Customer', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['displayName'].forEach(checkPropertyExists(model));
+  ['displayName'].forEach(checkPropertyExists(model));
 })

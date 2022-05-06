@@ -1,5 +1,4 @@
 import { TableClaimController } from "./tableClaim.controller";
-import { config } from "../config";
 import {
   Customer,
   Employee,

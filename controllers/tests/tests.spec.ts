@@ -1,9 +1,22 @@
 import App from '../../app';
 import request from 'supertest';
-import { Addon, Category, Customer, CustomerOrder, Dish, Employee, EmployeeRole, Establishment, SignUpCode, Table, TableClaim, TableClaimStatus, TableOrder } from '../../models';
-import * as bcrypt from "bcrypt";
-import * as jwt from "jsonwebtoken";
-import { config } from '../../config';
+import {
+  Addon,
+  Category,
+  Customer,
+  CustomerOrder,
+  Dish,
+  Employee,
+  EmployeeRole,
+  Establishment,
+  SignUpCode,
+  Table,
+  TableClaim,
+  TableClaimStatus,
+  TableOrder
+} from '../../models';
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 const createEstablishment = async () => {
   let establishmentId: number;
@@ -56,7 +69,7 @@ describe('authentication.controller', () => {
   let tableClaimId: number = undefined;
   let establishmentId: number = undefined;
   let tableId: number = undefined;
-  let token: string = 'dummy';
+  let token = 'dummy';
   let customerId: number = undefined;
   let employeeId: number = undefined;
 
@@ -209,7 +222,7 @@ describe('category.controller', () => {
 
   beforeAll(async () => {
     establishmentId = await createEstablishment();
-    let { token: t, employeeId: e } = await createAdmin(establishmentId);
+    const { token: t, employeeId: e } = await createAdmin(establishmentId);
     employeeId = e;
     token = t;
   });
@@ -275,7 +288,7 @@ describe('dish.controller dish', () => {
 
   beforeAll(async () => {
     establishmentId = await createEstablishment();
-    let { token: t, employeeId: e } = await createAdmin(establishmentId);
+    const { token: t, employeeId: e } = await createAdmin(establishmentId);
     employeeId = e;
     token = t;
 
@@ -374,7 +387,7 @@ describe('dish.controller addons', () => {
 
   beforeAll(async () => {
     establishmentId = await createEstablishment();
-    let { token: t, employeeId: e } = await createAdmin(establishmentId);
+    const { token: t, employeeId: e } = await createAdmin(establishmentId);
     employeeId = e;
     token = t;
 
@@ -459,7 +472,7 @@ describe('table.controller', () => {
 
   beforeAll(async () => {
     establishmentId = await createEstablishment();
-    let { token: t, employeeId: e } = await createAdmin(establishmentId);
+    const { token: t, employeeId: e } = await createAdmin(establishmentId);
     employeeId = e;
     token = t;
   });
@@ -634,7 +647,7 @@ describe('order.controller', () => {
     request(App.server)
       .get(`/api/order/table`)
       .expect(200)
-      .end((err, res) => {
+      .end(() => {
         done();
       });
   });
@@ -643,7 +656,7 @@ describe('order.controller', () => {
     request(App.server)
       .get(`/api/order/receipts`)
       .expect(200)
-      .end((err, res) => {
+      .end(() => {
         done();
       });
   });
@@ -652,7 +665,7 @@ describe('order.controller', () => {
     request(App.server)
       .get(`/api/order/receipt/customer`)
       .expect(200)
-      .end((err, res) => {
+      .end(() => {
         done();
       });
   });
@@ -661,7 +674,7 @@ describe('order.controller', () => {
     request(App.server)
       .get(`/api/order/receipt/total`)
       .expect(200)
-      .end((err, res) => {
+      .end(() => {
         done();
       });
   });

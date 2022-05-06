@@ -11,5 +11,5 @@ describe('Addon', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['title', 'isOptional', 'dishId', 'isMultiple'].forEach(checkPropertyExists(model));
+  ['title', 'isOptional', 'dishId', 'isMultiple'].forEach(checkPropertyExists(model));
 });

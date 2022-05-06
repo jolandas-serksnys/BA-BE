@@ -3,7 +3,6 @@ import {
 } from "../models";
 import { ResponseType } from "../utils";
 import { Request, Response } from "express";
-import { DestroyOptions } from "sequelize";
 
 const MESSAGE_CREATE = 'Category was successfully created';
 const MESSAGE_UPDATE = 'Category was successfully updated';

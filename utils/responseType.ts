@@ -3,4 +3,4 @@ export enum ResponseType {
   WARNING = 'warning',
   INFO = 'info',
   DANGER = 'danger',
-};
+}

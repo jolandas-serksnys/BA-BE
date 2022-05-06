@@ -3,7 +3,7 @@ export const generateCode = (length: number) => {
 
   const randomArray = Array.from(
     { length },
-    (v, k) => chars[Math.floor(Math.random() * chars.length)]
+    () => chars[Math.floor(Math.random() * chars.length)]
   );
 
   const randomString = randomArray.join('');

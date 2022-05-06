@@ -11,5 +11,5 @@ describe('Table', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['displayName', 'number', 'isAvailable', 'seats'].forEach(checkPropertyExists(model));
+  ['displayName', 'number', 'isAvailable', 'seats'].forEach(checkPropertyExists(model));
 })

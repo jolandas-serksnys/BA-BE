@@ -1,16 +1,15 @@
-import app from "../app";
-import { config } from "../config";
+import app from '../app';
 import {
   AssistanceRequest,
   Customer,
   Table,
   TableClaim,
   TableClaimStatus
-} from "../models";
-import { ResponseType } from "../utils";
-import { generateCode } from "../utils/codeGenerator";
-import { Request, Response } from "express";
-import * as jwt from "jsonwebtoken";
+} from '../models';
+import { ResponseType } from '../utils';
+import { generateCode } from '../utils/codeGenerator';
+import { Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
 
 const MESSAGE_CLAIMED = 'Successfully signed in';
 const MESSAGE_SEATS_TAKEN = 'All the seats are already taken at this table';
@@ -46,7 +45,7 @@ export class TableClaimController {
       });
     }
 
-    let tableClaim = await TableClaim.findOne({
+    const tableClaim = await TableClaim.findOne({
       where: {
         tableId: id,
         status: TableClaimStatus.ACTIVE
@@ -423,4 +422,4 @@ export class TableClaimController {
 
     return relevantSockets;
   };
-};
+}

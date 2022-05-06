@@ -11,5 +11,5 @@ describe('Tag', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['title'].forEach(checkPropertyExists(model))
+  ['title'].forEach(checkPropertyExists(model))
 })

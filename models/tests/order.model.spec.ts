@@ -11,7 +11,7 @@ describe('TableOrder', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['tableClaimId', 'status'].forEach(checkPropertyExists(model))
+  ['tableClaimId', 'status'].forEach(checkPropertyExists(model))
 })
 
 describe('CustomerOrder', () => {
@@ -21,7 +21,7 @@ describe('CustomerOrder', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['title', 'status', 'comment', 'price', 'totalPrice', 'tableOrderId', 'ownerId', 'quantity'].forEach(checkPropertyExists(model))
+  ['title', 'status', 'comment', 'price', 'totalPrice', 'tableOrderId', 'ownerId', 'quantity'].forEach(checkPropertyExists(model))
 
 })
 
@@ -32,5 +32,5 @@ describe('OrderAddon', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['title', 'price'].forEach(checkPropertyExists(model))
+  ['title', 'price'].forEach(checkPropertyExists(model))
 })

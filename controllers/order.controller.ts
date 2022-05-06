@@ -1,5 +1,5 @@
-import { TableClaimController } from "./tableClaim.controller";
-import app from "../app";
+import { TableClaimController } from './tableClaim.controller';
+import app from '../app';
 import {
   Customer,
   CustomerOrder,
@@ -13,10 +13,10 @@ import {
   TableClaimStatus,
   TableOrder,
   TableOrderStatus
-} from "../models";
-import { ResponseType } from "../utils";
-import { Request, Response } from "express";
-import { Op } from "sequelize";
+} from '../models';
+import { ResponseType } from '../utils';
+import { Request, Response } from 'express';
+import { Op } from 'sequelize';
 
 const MESSAGE_404 = 'Table order not found.';
 const MESSAGE_201 = 'Order has been accepted.';
@@ -25,7 +25,7 @@ const MESSAGE_STATUS = 'Order status has been updated.';
 const MESSAGE_CLAIM_CLOSED = 'Table claim has been closed and ordering new dishes is not possible.';
 
 export class OrderController {
-  public async calculatePrice(req: Request, res: Response) {
+  public calculatePrice = async (req: Request, res: Response) => {
     try {
       const { dishId, options, quantity }: OrderPriceRequestInterface = req.body;
       let price = 0.0;

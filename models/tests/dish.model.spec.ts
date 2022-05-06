@@ -11,5 +11,5 @@ describe('Dish', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['title', 'description', 'warningLabel', 'isVisible', 'isAvailable', 'imageUrl', 'basePrice'].forEach(checkPropertyExists(model));
+  ['title', 'description', 'warningLabel', 'isVisible', 'isAvailable', 'imageUrl', 'basePrice'].forEach(checkPropertyExists(model));
 })

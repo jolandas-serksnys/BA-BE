@@ -11,5 +11,5 @@ describe('Category', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['title', 'description', 'isVisible', 'establishmentId'].forEach(checkPropertyExists(model));
+  ['title', 'description', 'isVisible', 'establishmentId'].forEach(checkPropertyExists(model));
 })

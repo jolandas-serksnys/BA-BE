@@ -1,6 +1,6 @@
-import { Establishment, Table, TableInterface } from "../models";
-import { ResponseType } from "../utils";
-import { Request, Response } from "express";
+import { Establishment, Table, TableInterface } from '../models';
+import { ResponseType } from '../utils';
+import { Request, Response } from 'express';
 
 const MESSAGE_CREATE = 'Table was successfully created';
 const MESSAGE_UPDATE = 'Table was successfully updated';
@@ -251,4 +251,4 @@ export class TableController {
       });
     }
   };
-};
+}

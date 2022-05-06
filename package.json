@@ -6,7 +6,8 @@
   "scripts": {
     "test": "yarn jest --forceExit --detectOpenHandles --watchAll --maxWorkers=1",
     "start": "node --loader ts-node/esm server.ts",
-    "dev": "nodemon server.ts"
+    "dev": "nodemon server.ts",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +18,10 @@
     "@types/node": "^17.0.21",
     "@types/supertest": "^2.0.12",
     "@types/validator": "^13.7.1",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
     "chai": "^4.3.6",
+    "eslint": "^8.14.0",
     "jest": "27.0.0",
     "mock-express-request": "^0.2.2",
     "nodemon": "^2.0.15",

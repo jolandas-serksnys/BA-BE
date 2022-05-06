@@ -11,5 +11,5 @@ describe('AssistanceRequest', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['type', 'isHidden', 'message', 'tableClaimId'].forEach(checkPropertyExists(model));
+  ['type', 'isHidden', 'message', 'tableClaimId'].forEach(checkPropertyExists(model));
 })

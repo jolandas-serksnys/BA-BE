@@ -11,5 +11,5 @@ describe('Employee', () => {
     expect(model).toBeTruthy();
   });
 
-  ;['firstName', 'lastName', 'email', 'role'].forEach(checkPropertyExists(model));
+  ['firstName', 'lastName', 'email', 'role'].forEach(checkPropertyExists(model));
 })

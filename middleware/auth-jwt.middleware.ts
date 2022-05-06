@@ -1,7 +1,6 @@
-import { config } from "../config";
-import { Employee, EmployeeRole } from "../models";
-import { NextFunction, Request, Response } from "express";
-import * as jwt from "jsonwebtoken";
+import { Employee, EmployeeRole } from '../models';
+import { NextFunction, Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization.split(' ')[1];
@@ -15,7 +14,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   jwt.verify(token, process.env.SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({
-        message: "Unauthorized!"
+        message: 'Unauthorized!'
       });
     }
 
