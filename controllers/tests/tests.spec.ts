@@ -790,7 +790,7 @@ describe('order.controller', () => {
     request(App.server)
       .post(`/api/order/${customerOrderId}/cancel`)
       .set('Authorization', `Bearer ${token}`)
-      .end(done);
+      .expect(200, done);
   });
 
   it('should be able to show table order', (done) => {

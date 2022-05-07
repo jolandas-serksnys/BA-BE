@@ -207,7 +207,8 @@ export class OrderController {
 
   public cancelCustomerOrder = async (req: Request, res: Response) => {
     try {
-      const { id, userId } = req.body;
+      const { id } = req.params;
+      const { userId } = req.body;
       const customerOrder = await CustomerOrder.findOne({
         where: {
           id: id,
